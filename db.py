@@ -12,7 +12,7 @@ class DB:
     def __init_db(self) -> None:
         # Create tables for the new database.
         try:
-            with sqlite3.connect(self.__db_file) as c:
+            with sqlite3.connect(self.__db_file) as conn:
                 # Insert table creation queries here.
                 pass
 
@@ -31,4 +31,4 @@ class DB:
             result = None
             
         return result
-        
+
