@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 
 from db import DB
 
@@ -7,6 +7,6 @@ db = DB('database.db')
 
 @app.route('/')
 def index():
-  return 'Hello World!'
+  return render_template('index.html')
 
 
