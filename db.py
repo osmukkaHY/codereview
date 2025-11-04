@@ -11,10 +11,11 @@ class DB:
 
     def __init_db(self) -> None:
         # Create tables for the new database.
+        with open('schema.sql', 'r') as file:
+            script = file.read()
         try:
             with sqlite3.connect(self.__db_file) as conn:
-                # Insert table creation queries here.
-                pass
+                conn.executescript(script)
 
         except sqlite3.Error:
             print('DB.__init_db: '
