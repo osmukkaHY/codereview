@@ -9,6 +9,15 @@
 
 <body>
   <h1>Log In</h1>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul class="flashes">
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
   <form action="/login" method="post">
     <input type="text" name="username" placeholder="Username" size="16" /> <br />
     <input type="password" name="password" placeholder="Password" size="16" /> <br />
