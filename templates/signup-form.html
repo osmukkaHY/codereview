@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login or Signup</title>
+  <title>Sign Up</title>
 </head>
 
 <body>
@@ -18,10 +18,11 @@
       </ul>
     {% endif %}
   {% endwith %}
-  <form action="/login" method="post">
+  <form action="/signup" method="post">
     <input type="text" name="username" placeholder="Username" size="16" /> <br />
     <input type="password" name="password" placeholder="Password" size="16" /> <br />
-    <input type="submit" value="Log In" /> 
+    <input type="password" name="password-again" placeholder="Password Again" size="16" /> <br />
+    <input type="submit" value="Sign Up" />
   </form>
 
   <p>Don't have an account yet? <a href="signup_form">Sign up!</a></p>
