@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, session, flash
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 
 from config import db_file, secret
 from db import DB
@@ -25,7 +25,7 @@ def login():
     password_hash = db.execute("""SELECT password_hash
                                   FROM Users
                                   WHERE username = ?""", [username])
-    if not password_hash or not check_password_hash(password_hash, password):
+    if not password_hash or not len(password_hash) or not check_password_hash(password_hash[0][0], password):
         flash('Incorrect username or password.')
     else:
         flash('Login successful!')
@@ -35,6 +35,27 @@ def login():
 
 @app.route('/signup-form')
 def signup_form():
+    return render_template('signup-form.html')
+
+@app.route('/signup', methods=['POST'])
+def signup():
+    username = request.form['username']
+    print(type(username))
+    password = request.form['password']
+    password_again = request.form['password-again']
+
+    if password != password_again:
+        flash('The passwords you have given don\'t match.')
+        return render_template('signup_form.html')
+
+    password_hash = generate_password_hash(password)
+    if len(db.execute("""SELECT * FROM Users WHERE username = ?""", [username])):
+        flash('Username has been taken.')
+        return render_template('signup-form.html')
+
+    db.execute('INSERT INTO Users (username, password_hash) VALUES (?, ?)',
+               [username, password_hash])
+    flash('User successfully created!')
     return render_template('signup-form.html')
 
 
