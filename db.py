@@ -1,6 +1,8 @@
 import sqlite3
 import os
 
+from config import db_schema_file
+
 
 class DB:
     def __init__(self, db_file: str) -> None:
@@ -11,7 +13,7 @@ class DB:
 
     def __init_db(self) -> None:
         # Create tables for the new database.
-        with open('schema.sql', 'r') as file:
+        with open(db_schema_file, 'r') as file:
             script = file.read()
         try:
             with sqlite3.connect(self.__db_file) as conn:
