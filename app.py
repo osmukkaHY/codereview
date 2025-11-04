@@ -10,4 +10,6 @@ db = DB(db_file)
 def index():
     return render_template('index.html')
 
-
+@app.route('/login-form')
+def login_form():
+    return render_template('login-form.html')
