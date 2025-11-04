@@ -3,6 +3,9 @@ from secrets import token_hex
 
 
 db_schema_file  = 'schema.sql'
+if not path.isfile(db_schema_file):
+    print(f'No database schema file "{db_schema_file}". Exiting...')
+    exit()
 db_file         = 'database.db'
 
 secret          = ''
