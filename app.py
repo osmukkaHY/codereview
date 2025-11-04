@@ -33,4 +33,8 @@ def login():
     
     return render_template('login-form.html')
 
+@app.route('/signup-form')
+def signup_form():
+    return render_template('signup-form.html')
+
 
