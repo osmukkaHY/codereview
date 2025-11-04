@@ -9,3 +9,5 @@
 * Käyttäjä pystyy kommentoimaan toisten käyttäjien koodinpätkiä ja antamaan niille arvostelun.
 * Käyttäjä pystyy hakemaan tietokohteita filtterien (ohjelmointikieli, vastausen määrä, postauksen ikä ym.) perusteella.
 * Sovelluksessa voi tarkastella toisten käyttäjien profiileja, joista näkee esimerkiksi kontribuutioiden määrän.
+
+Tietokanta ja session-oliota varten tarvittava "secret" luodaan automaattisesti koodin suorituksen yhteydessä, jos niitä ei vielä ole.
