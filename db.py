@@ -1,7 +1,7 @@
 import sqlite3
 import os
 
-from config import db_schema_file
+from config import  db_file, db_schema_file
 
 
 class DB:
