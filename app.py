@@ -1,13 +1,13 @@
 from flask import Flask, render_template, request, session, flash
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from config import db_file, secret
+from config import secret
 from db import DB
 
 app = Flask(__name__)
 app.secret_key = secret
 
-db = DB(db_file)
+db = DB()
 
 @app.route('/')
 def index():
