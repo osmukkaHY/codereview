@@ -36,4 +36,5 @@ class Users:
             return False
         return self.__db.insert("""INSERT INTO
                                       Users (username, password_hash)
-                                      VALUES (?, ?)""", username, password_hash)
+                                      VALUES (?, ?)""", username,
+                                                        password_hash)
