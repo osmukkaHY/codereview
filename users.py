@@ -16,9 +16,10 @@ class Users:
 
     
 
-    def add_user(self, username: str, password_hash: str) -> bool | None:
+    def add(self, username: str, password_hash: str) -> bool | None:
         if self.exists(username):
             return False
         return self.__db.insert("""INSERT INTO
                                       Users (username, password_hash)
                                       VALUES (?, ?)""", username, password_hash)
+
