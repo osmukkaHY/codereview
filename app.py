@@ -1,13 +1,15 @@
 from flask import Flask, render_template, request, session, flash
-from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.security import generate_password_hash
 
 from config import secret
 from db import DB
+from users import Users
 
 app = Flask(__name__)
 app.secret_key = secret
 
 db = DB()
+users = Users()
 
 @app.route('/')
 def index():
@@ -22,10 +24,7 @@ def login():
     username = request.form['username']
     password = request.form['password']
 
-    password_hash = db.fetch("""SELECT password_hash
-                                FROM Users
-                                WHERE username = ?""", username)
-    if not password_hash or not len(password_hash) or not check_password_hash(password_hash[0][0], password):
+    if not users.validate(username, password):
         flash('Incorrect username or password.')
     else:
         flash('Login successful!')
