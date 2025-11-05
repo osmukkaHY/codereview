@@ -12,6 +12,13 @@ class Users:
                                         FROM Users
                                         WHERE username = ?
                                     );""", username)
-        if result == None:
-            return None
-        return bool(result[0][0])
+        return None if result == None else bool(result[0][0])
+
+    
+
+    def add_user(self, username: str, password_hash: str) -> bool | None:
+        if self.exists(username):
+            return False
+        return self.__db.insert("""INSERT INTO
+                                      Users (username, password_hash)
+                                      VALUES (?, ?)""", username, password_hash)
