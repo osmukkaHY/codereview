@@ -13,6 +13,15 @@ class Users:
                                         WHERE username = ?
                                     );""", username)
         return None if result == None else bool(result[0][0])
+    
+
+    def exists(self, username: str) -> bool | None:
+        result = self.__db.fetch("""SELECT EXISTS(
+                                        SELECT 1
+                                        FROM Users
+                                        WHERE username = ?
+                                    );""", username)
+        return None if result == None else bool(result[0][0])
 
     
 
@@ -22,4 +31,3 @@ class Users:
         return self.__db.insert("""INSERT INTO
                                       Users (username, password_hash)
                                       VALUES (?, ?)""", username, password_hash)
-
