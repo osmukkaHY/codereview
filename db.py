@@ -5,7 +5,7 @@ from config import  db_file, db_schema_file
 
 
 class DB:
-    def __init__(self, db_file: str) -> None:
+    def __init__(self) -> None:
         self.__db_file = db_file
         if not os.path.isfile(db_file):
             self.__init_db()
