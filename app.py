@@ -39,21 +39,17 @@ def signup_form():
 @app.route('/signup', methods=['POST'])
 def signup():
     username = request.form['username']
-    print(type(username))
+    if users.exists(username):
+        flash('Username has been taken.')
+        return render_template('signup-form.html')
+
     password = request.form['password']
     password_again = request.form['password-again']
-
     if password != password_again:
         flash('The passwords you have given don\'t match.')
         return render_template('signup_form.html')
 
-    password_hash = generate_password_hash(password)
-    if len(db.fetch("""SELECT * FROM Users WHERE username = ?""", username)):
-        flash('Username has been taken.')
-        return render_template('signup-form.html')
-
-    db.fetch('INSERT INTO Users (username, password_hash) VALUES (?, ?)',
-               username, password_hash)
+    users.add(username, generate_password_hash(password))
     flash('User successfully created!')
     return render_template('signup-form.html')
 
