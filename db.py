@@ -24,7 +24,7 @@ class DB:
                   'An error occurred while initializing a database.')
 
 
-    def fetch(self, query: str, args: list[str]=[]) -> list[tuple] | None:
+    def fetch(self, query: str, *args) -> list[tuple] | None:
         try:
             with sqlite3.connect(self.__db_file) as conn:
                 result = conn.execute(query, args).fetchall()
@@ -35,7 +35,7 @@ class DB:
             return None
         
 
-    def insert(self, query: str, args: list[str]=[]) -> bool:
+    def insert(self, query: str, *args) -> bool:
         try:
             with sqlite3.connect(self.__db_file) as conn:
                 conn.execute(query, args)
