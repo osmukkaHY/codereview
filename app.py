@@ -5,19 +5,23 @@ from config import secret
 from db import DB
 from users import Users
 
+
 app = Flask(__name__)
 app.secret_key = secret
 
 db = DB()
 users = Users()
 
+
 @app.route('/')
 def index():
     return render_template('index.html')
 
+
 @app.route('/login-form')
 def login_form():
     return render_template('login-form.html')
+
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -32,9 +36,11 @@ def login():
     
     return render_template('login-form.html')
 
+
 @app.route('/signup-form')
 def signup_form():
     return render_template('signup-form.html')
+
 
 @app.route('/signup', methods=['POST'])
 def signup():
@@ -52,5 +58,3 @@ def signup():
     users.add(username, generate_password_hash(password))
     flash('User successfully created!')
     return render_template('signup-form.html')
-
-
