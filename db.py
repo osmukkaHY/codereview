@@ -35,7 +35,7 @@ class DB:
             return None
         
 
-    def insert(self, query: str, *args) -> bool:
+    def insert(self, query: str, *args) -> bool | None:
         try:
             with sqlite3.connect(self.__db_file) as conn:
                 conn.execute(query, args)
@@ -43,5 +43,5 @@ class DB:
         except sqlite3.OperationalError:
             print('DB.execute: '
                  f'Couldn\'t execute query "{query}" with arguments {args}')
-            return False
+            return None
 
