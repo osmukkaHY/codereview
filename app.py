@@ -22,9 +22,9 @@ def login():
     username = request.form['username']
     password = request.form['password']
 
-    password_hash = db.execute("""SELECT password_hash
-                                  FROM Users
-                                  WHERE username = ?""", [username])
+    password_hash = db.fetch("""SELECT password_hash
+                                FROM Users
+                                WHERE username = ?""", [username])
     if not password_hash or not len(password_hash) or not check_password_hash(password_hash[0][0], password):
         flash('Incorrect username or password.')
     else:
@@ -49,11 +49,11 @@ def signup():
         return render_template('signup_form.html')
 
     password_hash = generate_password_hash(password)
-    if len(db.execute("""SELECT * FROM Users WHERE username = ?""", [username])):
+    if len(db.fetch("""SELECT * FROM Users WHERE username = ?""", [username])):
         flash('Username has been taken.')
         return render_template('signup-form.html')
 
-    db.execute('INSERT INTO Users (username, password_hash) VALUES (?, ?)',
+    db.fetch('INSERT INTO Users (username, password_hash) VALUES (?, ?)',
                [username, password_hash])
     flash('User successfully created!')
     return render_template('signup-form.html')
