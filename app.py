@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session, flash
+from flask import Flask, render_template, request, session, flash, redirect
 from werkzeug.security import generate_password_hash
 
 from config import secret
@@ -34,7 +34,7 @@ def login():
         flash('Login successful!')
         session['username'] = username
     
-    return render_template('login-form.html')
+    return redirect('/')
 
 
 @app.route('/signup-form')
@@ -58,3 +58,9 @@ def signup():
     users.add(username, generate_password_hash(password))
     flash('User successfully created!')
     return render_template('signup-form.html')
+
+
+@app.route('/logout')
+def logout():
+    del session['username']
+    return render_template('index.html')
