@@ -38,3 +38,12 @@ class Users:
                                       Users (username, password_hash)
                                       VALUES (?, ?)""", username,
                                                         password_hash)
+    
+
+    def delete(self, username: str, password: str) -> bool | None:
+        if not self.exists(username):
+            return False
+        
+        return self.__db.insert("""DELETE FROM Users
+                                   WHERE username = ?
+                                   ;""", username)
