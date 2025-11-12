@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash
 from config import secret
 from db import DB
 from users import Users
+from posts import Posts
 
 
 app = Flask(__name__)
@@ -11,6 +12,7 @@ app.secret_key = secret
 
 db = DB()
 users = Users()
+posts = Posts()
 
 
 @app.route('/')
@@ -70,4 +72,13 @@ def new_post_form():
     if session['username']:
         return render_template('new-post-form.html')
     return 'Forbidden'
+
+@app.route('/create-new-post', methods=['POST', 'GET'])
+def create_new_post():
+    posts.new(session['username'],
+              request.form['title'],
+              request.form['context'],
+              request.form['content'])
+    flash('New Post Added!')
+    return redirect('/')
 

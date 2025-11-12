@@ -40,7 +40,7 @@ class DB:
             with sqlite3.connect(self.__db_file) as conn:
                 conn.execute(query, args)
             return True
-        except sqlite3.OperationalError:
+        except:
             print('DB.execute: '
                  f'Couldn\'t execute query "{query}" with arguments {args}')
             return None

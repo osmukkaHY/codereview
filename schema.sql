@@ -6,7 +6,7 @@ CREATE TABLE Users (
 
 CREATE TABLE Posts (
     id INTEGER PRIMARY KEY,
-    ts DEFAULT TIMESTAMP
+    ts DEFAULT TIMESTAMP,
     poster_id INTEGER REFERENCES Users,
     title TEXT NOT NULL,
     context TEXT NOT NULL,
@@ -19,4 +19,4 @@ CREATE TABLE Reviews (
     reviewer_id INTEGER REFERENCES Users,
     post_id INTEGER REFERENCES Posts,
     rating UNSIGNED TINYINT,
-)
+);
