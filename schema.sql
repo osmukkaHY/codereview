@@ -9,6 +9,7 @@ CREATE TABLE Posts (
     ts DEFAULT TIMESTAMP
     poster_id INTEGER REFERENCES Users,
     title TEXT NOT NULL,
+    context TEXT NOT NULL,
     content TEXT NOT NULL
 );
 
