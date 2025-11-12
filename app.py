@@ -64,3 +64,10 @@ def signup():
 def logout():
     del session['username']
     return render_template('index.html')
+
+@app.route('/new-post-form')
+def new_post_form():
+    if session['username']:
+        return render_template('new-post-form.html')
+    return 'Forbidden'
+
