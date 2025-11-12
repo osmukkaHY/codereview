@@ -23,7 +23,8 @@
     {% if not session.username %}
       <a href="{{ url_for('login_form') }}">Log In or Sign Up</a>
     {% else %}
-      <a href="{{ url_for('logout') }}"><button type="button">Log Out</button></a>
+      <a href="{{ url_for('logout') }}"><button type="button">Log Out</button></a> <br />
+      <a href="{{ url_for('new_post_form') }}"><button type=button>Create New Post</button></a>
     {% endif %}
   </p> 
 </body>
