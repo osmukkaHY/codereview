@@ -64,7 +64,8 @@ def signup():
 
 @app.route('/logout')
 def logout():
-    del session['username']
+    if 'username' in session:
+        del session['username']
     return render_template('index.html')
 
 @app.route('/new-post-form')
