@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>New Post</title>
-</head>
-<body>
+{% extends "layout.html" %}
+
+{% block title %}New Post{% endblock %}
+
+{% block body %}
   <h1>Create New Post</h1>
   <br />
   <form action="/create-new-post" method="post">
@@ -14,5 +11,4 @@
     <textarea name="content" placeholder="Code here..." rows="32" cols="80"></textarea>
     <input type="submit" text="Post" />
   </form>
-</body>
-</html>
+{% endblock %}
