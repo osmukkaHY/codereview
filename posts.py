@@ -5,7 +5,7 @@ class Posts:
         self._db = DB()
 
     def new(self,
-            username:   int,
+            username:   str,
             title:      str,
             context:    str,
             content:    str) -> bool | None:
