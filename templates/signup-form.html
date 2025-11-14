@@ -1,13 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "layout.html" %}
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign Up</title>
-</head>
+{% block title %}Log In{% endblock %}
 
-<body>
+{% block body %}
   <h1>Sign Up</h1>
   {% with messages = get_flashed_messages() %}
     {% if messages %}
@@ -25,7 +20,7 @@
     <input type="submit" value="Sign Up" />
   </form>
 
-  <p>Already a user? <a href="{{ url_for('login_form') }}">Log in!</a></p>
-</body>
+  <p>Already a user? <a href="/login-form">Log in!</a></p>
+{% endblock %}
 
 </html>
