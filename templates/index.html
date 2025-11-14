@@ -11,5 +11,9 @@
 </p>
 {% endfor %}
 
-Welcome to codereview
+{% if session.username %}
+  <p>Welcome back {{ session.username }}! </p>
+{% else %}
+  <p>Welcome to Codereview!</p>
+{% endif %}
 {% endblock %}
