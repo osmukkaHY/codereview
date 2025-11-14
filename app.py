@@ -20,7 +20,7 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/login-form')
+@app.route('/login-form', methods=['GET'])
 def login_form():
     return render_template('login-form.html')
 
@@ -39,7 +39,7 @@ def login():
     return redirect('/')
 
 
-@app.route('/signup-form')
+@app.route('/signup-form', methods=['GET'])
 def signup_form():
     return render_template('signup-form.html')
 
