@@ -1,32 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "layout.html" %}
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Codereview</title>
-</head>
+{% block title %}Codereview{% endblock %}
 
-<body>
-  This is my code review site! <br />
-  Here you will be able to post your own code, get it rated and review other people's code.
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-      <ul class="flashes">
-      {% for message in messages %}
-        <li>{{ message }}</li>
-      {% endfor %}
-      </ul>
-    {% endif %}
-  {% endwith %}
-  <p>
-    {% if not session.username %}
-      <a href="{{ url_for('login_form') }}">Log In or Sign Up</a>
-    {% else %}
-      <a href="{{ url_for('logout') }}"><button type="button">Log Out</button></a> <br />
-      <a href="{{ url_for('new_post_form') }}"><button type=button>Create New Post</button></a>
-    {% endif %}
-  </p> 
-</body>
+{% block body %}
+<h2>Front Page</h2>
 
-</html>
+Welcome to codereview
+{% endblock %}
