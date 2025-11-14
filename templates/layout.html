@@ -8,7 +8,8 @@
 <body>
   <a href="/">Front Page</a> | 
   {% if session.username %}
-    <a href="/logout">Log Out</a>
+    <a href="/logout">Log Out</a> | 
+    <a href="/new-post-form">New Post</a>
   {% else %}
     <a href="/login-form">Log In</a> | 
     <a href="/signup-form">Sign Up</a>
