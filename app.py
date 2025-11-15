@@ -17,7 +17,11 @@ posts = Posts()
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    post_previews = db.fetch("""SELECT *
+                                FROM Posts
+                                ORDER BY ts
+                                LIMIT 5""")
+    return render_template('index.html', post_previews=post_previews)
 
 
 @app.route('/login-form', methods=['GET'])

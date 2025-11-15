@@ -13,7 +13,18 @@
 
 {% if session.username %}
   <p>Welcome back {{ session.username }}! </p>
+  <p>Here's some recent posts:</p>
+  <hr />
+  {% for post in post_previews %}
+    <p>{{ post[3] }}</p>
+    <hr />
+  {% endfor %}
 {% else %}
   <p>Welcome to Codereview!</p>
 {% endif %}
+
+
+
+
+
 {% endblock %}
