@@ -27,3 +27,26 @@ class Posts:
                                                     title,
                                                     context,
                                                     content)
+
+    def n_recent(self, n: int):
+        post_tuples = self._db.fetch("""SELECT *
+                                        FROM Posts
+                                        ORDER BY ts
+                                        LIMIT ?;""", n)
+        posts = []
+        for post in post_tuples:
+            username = self._db.fetch("""SELECT username
+                                         FROM Users
+                                         WHERE id = ?;""", post[2])[0][0]
+            posts.append(Post(post[1], username, post[3], post[4], post[5]))
+        return posts
+
+    def by_user(self, username: str) -> list[Post]:
+        post_tuples = self._db.fetch("""SELECT *
+                                        FROM Posts
+                                        WHERE username = ?;""", username)
+        posts = []
+        for post in post_tuples:
+            posts.append(Post(post[1], username, post[3], post[4], post[5]))
+        return posts
+

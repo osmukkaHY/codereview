@@ -16,7 +16,10 @@
   <p>Here's some recent posts:</p>
   <hr />
   {% for post in post_previews %}
-    <p>{{ post[3] }}</p>
+    <p>
+      {{ post.title }} <br />
+      By {{ post.username }}
+    </p>
     <hr />
   {% endfor %}
 {% else %}

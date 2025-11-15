@@ -17,10 +17,7 @@ posts = Posts()
 
 @app.route('/')
 def index():
-    post_previews = db.fetch("""SELECT *
-                                FROM Posts
-                                ORDER BY ts
-                                LIMIT 5""")
+    post_previews = posts.n_recent(5)
     return render_template('index.html', post_previews=post_previews)
 
 
