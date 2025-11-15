@@ -6,7 +6,7 @@ CREATE TABLE Users (
 
 CREATE TABLE Posts (
     id INTEGER PRIMARY KEY,
-    ts DEFAULT TIMESTAMP,
+    ts TEXT DEFAULT (datetime('now')),
     poster_id INTEGER REFERENCES Users,
     title TEXT NOT NULL,
     context TEXT NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE Posts (
 
 CREATE TABLE Reviews (
     id INTEGER PRIMARY KEY,
-    ts DEFAULT TIMESTAMP,
+    ts TEXT DEFAULT (datetime('now')),
     reviewer_id INTEGER REFERENCES Users,
     post_id INTEGER REFERENCES Posts,
     rating UNSIGNED TINYINT,
