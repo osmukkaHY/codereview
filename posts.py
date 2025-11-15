@@ -1,4 +1,15 @@
+from dataclasses import dataclass
+
 from db import DB
+
+@dataclass
+class Post:
+    timestamp:  str
+    username:   str
+    title:      str
+    context:    str
+    content:    str
+
 
 class Posts:
     def __init__(self):
