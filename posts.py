@@ -4,6 +4,7 @@ from db import DB
 
 @dataclass
 class Post:
+    id:         str
     timestamp:  str
     username:   str
     title:      str
@@ -38,7 +39,7 @@ class Posts:
             username = self._db.fetch("""SELECT username
                                          FROM Users
                                          WHERE id = ?;""", post[2])[0][0]
-            posts.append(Post(post[1], username, post[3], post[4], post[5]))
+            posts.append(Post(post[0], post[1], username, post[3], post[4], post[5]))
         return posts
 
     def by_user(self, username: str) -> list[Post]:
@@ -47,6 +48,6 @@ class Posts:
                                         WHERE username = ?;""", username)
         posts = []
         for post in post_tuples:
-            posts.append(Post(post[1], username, post[3], post[4], post[5]))
+            posts.append(Post(post[0], post[1], username, post[3], post[4], post[5]))
         return posts
 
