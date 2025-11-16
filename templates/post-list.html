@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block title %}Posts{% endblock %}
+
+{% block body %}
+{% for post in posts %}
+  <p>
+    <a href="/post/{{ post.id }}">{{ post.title }}</a> <br />
+    By {{ post.username }}
+  </p>
+  <hr />
+{% endfor %}
+
+{% endblock %}
+
