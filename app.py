@@ -84,3 +84,9 @@ def create_new_post():
     flash('New Post Added!')
     return redirect('/')
 
+@app.route('/post/<int:post_id>')
+def show_post(post_id):
+    post = posts.by_id(post_id)
+    print(post.content)
+    return render_template('post.html', post=post)
+
