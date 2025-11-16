@@ -17,7 +17,7 @@
   <hr />
   {% for post in post_previews %}
     <p>
-      {{ post.title }} <br />
+      <a href="/post/{{ post.id }}">{{ post.title }}</a>  <br />
       By {{ post.username }}
     </p>
     <hr />
