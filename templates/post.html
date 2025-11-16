@@ -1,14 +1,14 @@
 {% extends "layout.html" %}
 
-{%block title%}{{ post_title }}{% endblock %}
+{%block title%}{{ post.title }}{% endblock %}
 
 {% block body %}
-<h2>{{ post_title }}</h2>
+<h2>{{ post.title }}</h2>
 <hl />
 
-<p>{{ post_context }}</p>
+<p>{{ post.context }}</p>
 
 <code>
-  {{ post_content }}
+  {{ post.content }}
 </code>
 {% endblock %}
