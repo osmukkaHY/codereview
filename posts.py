@@ -28,6 +28,12 @@ class Posts:
                                                     title,
                                                     context,
                                                     content)
+        
+    def by_id(self, id: int) -> Post | None:
+        post_tuple = self._db.fetch("""SELECT *
+                                       FROM Posts
+                                       WHERE id = ?;""", id)
+        return post_tuple[0][0] if len(post_tuple) else None
 
     def n_recent(self, n: int):
         post_tuples = self._db.fetch("""SELECT *
