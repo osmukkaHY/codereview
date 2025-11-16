@@ -72,7 +72,7 @@ def logout():
 @app.route('/new-post-form')
 def new_post_form():
     if session['username']:
-        return render_template('new-post-form.html')
+        return render_template('new-post-form.html', post=None)
     return 'Forbidden'
 
 @app.route('/create-new-post', methods=['POST', 'GET'])
@@ -93,10 +93,31 @@ def show_post(post_id):
 @app.route('/search')
 def search():
     query = request.args.get('query')
-    print(query)
     results = posts.search(query)
     if not results:
         results = []
     print(results)
     return render_template('search-results.html', query=query, posts=results)
+
+@app.route('/edit/<int:post_id>')
+def edit(post_id):
+    post = posts.by_id(post_id)
+    if post.username != session['username']:
+        return 'Forbidden'
+    
+    # Delete the old post
+    db.insert("""DELETE FROM Posts
+                 WHERE id = ?""", post.id)
+    return render_template('new-post-form.html', post=post)
+
+@app.route('/delete/<int:post_id>')
+def delete(post_id):
+    post = posts.by_id(post_id)
+    if post.username != session['username']:
+        return 'Forbidden'
+    
+    db.insert("""DELETE FROM Posts
+                 WHERE id = ?""", post.id)
+    flash('Post deleted!')
+    return redirect('/')
 

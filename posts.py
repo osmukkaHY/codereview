@@ -33,6 +33,7 @@ class Posts:
         post_tuples = self._db.fetch("""SELECT *
                                        FROM Posts
                                        WHERE id = ?;""", id)
+        print(post_tuples)
         if not len(post_tuples):
             return None
         post = post_tuples[0]
