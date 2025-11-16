@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{%block title%}Results for {{ query }}{% endblock %}
+
+{% block body %}
+{% if posts|length %}
+  <h2>Results for query {{ query }}</h2>
+  {% for post in posts %}
+    <p>
+      <a href="/post/{{ post.id }}">{{ post.title }}</a>  <br />
+      By {{ post.username }}
+    </p>
+    <hr />
+  {% endfor %}
+{% else %}
+  <h2>No results for query {{ query }}</h2>
+{% endif %}
+{% endblock %}

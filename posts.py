@@ -63,4 +63,19 @@ class Posts:
         for post in post_tuples:
             posts.append(Post(post[0], post[1], username, post[3], post[4], post[5]))
         return posts
+    
+    def search(self, keyword: str) -> Post | None:
+        post_tuples = self._db.fetch("""SELECT *
+                                        FROM Posts
+                                        WHERE content LIKE ?""", '%'+keyword+'%')
+        if not len(post_tuples):
+            return None
+        
+        posts = []
+        for post in post_tuples:
+            username = self._db.fetch("""SELECT username
+                                         FROM Users
+                                         WHERE id = ?;""", post[2])[0][0]
+            posts.append(Post(post[0], post[1], username, post[3], post[4], post[5]))
+        return posts
 

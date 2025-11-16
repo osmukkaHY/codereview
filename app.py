@@ -90,3 +90,13 @@ def show_post(post_id):
     print(post.content)
     return render_template('post.html', post=post)
 
+@app.route('/search')
+def search():
+    query = request.args.get('query')
+    print(query)
+    results = posts.search(query)
+    if not results:
+        results = []
+    print(results)
+    return render_template('search-results.html', query=query, posts=results)
+
