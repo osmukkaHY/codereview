@@ -4,7 +4,7 @@ from werkzeug.security import generate_password_hash
 
 from config import secret, db_file
 from query import query
-import users
+import user
 from posts import Posts
 
 
@@ -31,7 +31,7 @@ def login():
     username = request.form['username']
     password = request.form['password']
 
-    if not users.validate(username, password):
+    if not user.validate(username, password):
         flash('Incorrect username or password.')
     else:
         flash('Login successful!')
@@ -48,7 +48,7 @@ def signup_form():
 @app.route('/signup', methods=['POST'])
 def signup():
     username = request.form['username']
-    if users.exists(username):
+    if user.exists(username):
         flash('Username has been taken.')
         return render_template('signup-form.html')
 
@@ -58,7 +58,7 @@ def signup():
         flash('The passwords you have given don\'t match.')
         return render_template('signup_form.html')
 
-    users.create(username, generate_password_hash(password))
+    user.create(username, generate_password_hash(password))
     flash('User successfully created!')
     return render_template('signup-form.html')
 
