@@ -25,7 +25,7 @@ class Query:
     def purely_descriptive(func: Callable[["Query", str], str]) -> Callable[["Query", str], str]:
         def wrapper(query: 'Query', argument: str) -> "Query":
             if not query._query_type:
-                query._error_status = True
+                query._error_message = True
             else:
                 func(query, argument)
             return query
@@ -40,12 +40,12 @@ class Query:
                 
                 # If keyword has to be first but isn't.
                 if query._query_type and binds_to == [None]:
-                    query._error_status = True
+                    query._error_message = True
 
                 # If the given argument is not a string.
                 if not isinstance(argument, str):
-                    query._error_status = True
-                if not query._error_status:
+                    query._error_message = True
+                if not query._error_message:
                     if not query._query_type:
                         query._query_type = {
                             'SELECT': QueryType.SELECT,
@@ -100,9 +100,9 @@ class Query:
     def delete(self, argument: str) -> 'Query':
         return self
 
-    def execute(self, *args) -> list[tuple] | None:
-        if self._error_status:
-            return None
+    def execute(self, *args) -> list[tuple] | str:
+        if self._error_message:
+            return self._error_message
         
         result = self._conn.execute(' '.join(self._query_list), args).fetchall()
         return result
