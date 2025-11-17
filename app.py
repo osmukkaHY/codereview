@@ -107,7 +107,7 @@ def edit(post_id):
         return 'Forbidden'
     
     # Delete the old post
-    query(conn).delete('').from_('Posts').where('id = ?').execute(post.id)
+    query().delete('').from_('Posts').where('id = ?').execute(post.id)
     return render_template('new-post-form.html', post=post)
 
 @app.route('/delete/<int:post_id>')
@@ -116,7 +116,7 @@ def delete(post_id):
     if post.username != session['username']:
         return 'Forbidden'
     
-    query(conn).delete('').from_('Posts').where('id = ?').execute(post.id)
+    query().delete('').from_('Posts').where('id = ?').execute(post.id)
     flash('Post deleted!')
     return redirect('/')
 
