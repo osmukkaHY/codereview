@@ -17,5 +17,14 @@ class Query:
         self._query_list.append(argument)
         return self
 
+    def from_(self, argument: str):
+        if not isinstance(argument, str):
+            self._error_status = True
+            return self
+        
+        self._query_list.append('FROM')
+        self._query_list.append(argument)
+        return self
+
 def query(conn: sqlite3.Connection) -> Query:
     return Query(conn, [])
