@@ -99,12 +99,20 @@ class Query:
     def delete(self, argument: str) -> 'Query':
         return self
 
-    def execute(self, *args) -> list[tuple] | str:
+    def execute(self, *args) -> list[tuple] | int | str:
         if self._error_message:
             return self._error_message
         
-        result = self._conn.execute(' '.join(self._query_list), args).fetchall()
-        return result
+        result = self._conn.execute(' '.join(self._query_list), args)
+
+        match self._query_type:
+            case QueryType.SELECT:
+                return result.fetchall()
+            case QueryType.INSERT:
+                return result.lastrowid
+            case QueryType.UPDATE | QueryType.DELETE:
+                return result.rowcount
+
 
 
 def query(conn: sqlite3.Connection) -> Query:
