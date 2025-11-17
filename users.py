@@ -18,17 +18,16 @@ class Users:
         else False
     
 
-    def validate(self, username: str, password: str) -> bool | None:
-        if not self.exists(username): return False
-        result = query().select('username, password_hash') \
-                        .from_('Users') \
-                        .where('username = ?') \
-                        .execute(username) \
-                        .fetchall()
-        if result == None: return False
-        password_hash = result[0][1]
+    def validate(self, username: str, password: str) -> bool:
+        if not self.exists(username):
+            return False
+        password_hash = query().select('username, password_hash')  \
+                               .from_('Users')                     \
+                               .where('username = ?')              \
+                               .execute(username)                  \
+                               .fetchone()[1]
 
-        return True if check_password_hash(password_hash, password) else False
+        return check_password_hash(password_hash, password)
 
     
 
