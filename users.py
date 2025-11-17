@@ -1,6 +1,7 @@
 from werkzeug.security import check_password_hash
 
 from db import DB
+from query import query
 
 
 class Users:
@@ -8,13 +9,13 @@ class Users:
         self.__db = DB()
 
     
-    def exists(self, username: str) -> bool | None:
-        result = self.__db.fetch("""SELECT EXISTS(
-                                        SELECT 1
-                                        FROM Users
-                                        WHERE username = ?
-                                    );""", username)
-        return None if result == None else bool(result[0][0])
+    def exists(self, username: str) -> bool:
+        result = query().select('1') \
+                        .from_('Users') \
+                        .where('username = ?') \
+                        .execute(username) \
+                        .fetchall()
+        return True if len(result) else False
     
 
     def validate(self, username: str, password: str) -> bool | None:
