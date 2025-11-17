@@ -48,18 +48,21 @@ def signup_form():
 @app.route('/signup', methods=['POST'])
 def signup():
     username = request.form['username']
-    if user.exists(username):
-        flash('Username has been taken.')
-        return render_template('signup-form.html')
-
     password = request.form['password']
     password_again = request.form['password-again']
-    if password != password_again:
-        flash('The passwords you have given don\'t match.')
-        return render_template('signup_form.html')
 
-    user.create(username, generate_password_hash(password))
-    flash('User successfully created!')
+    if username == '' or password == '' or password_again == '':
+        flash('Fields cannot be empty!')
+        
+    elif user.exists(username):
+        flash('Username has been taken.')
+
+    elif password != password_again:
+        flash('The passwords you have given don\'t match.')
+
+    else:
+        user.create(username, generate_password_hash(password))
+        flash('User successfully created!')
     return render_template('signup-form.html')
 
 
