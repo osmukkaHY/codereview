@@ -39,10 +39,14 @@ class Users:
                               .lastrowid                                       \
         else False
 
-    def delete(self, username: str, password: str) -> bool | None:
+
+    def delete(self, username: str) -> bool:
         if not self.exists(username):
             return False
         
-        return self.__db.insert("""DELETE FROM Users
-                                   WHERE username = ?
-                                   ;""", username)
+        return True if query().delete('')              \
+                              .from_('Users')          \
+                              .where('username = ?')   \
+                              .execute(username)       \
+                              .rowcount                \
+        else False
