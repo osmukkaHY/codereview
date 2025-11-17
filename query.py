@@ -30,8 +30,9 @@ class Query:
                 func(query, argument)
             return query
         return wrapper
-                
 
+    """Appends a keyword and its arguments to the query and returns an error if needed.
+    """
     @staticmethod
     def sql_clause(keyword: str, binds_to: list[str]=None) -> Callable[['Query', str], 'Query']:
         binds_to = [None] if not binds_to else binds_to
