@@ -70,43 +70,52 @@ class Query:
     def select(self, argument: str) -> 'Query':
         return self
 
+
     @purely_descriptive
     @sql_clause('FROM', binds_to=['SELECT', 'DELETE'])
     def from_(self, argument: str) -> 'Query':
         return self
+
 
     @purely_descriptive
     @sql_clause('WHERE', binds_to=['FROM'])
     def where(self, argument: str) -> 'Query':
         return self
 
+
     @purely_descriptive
     @sql_clause('HAVING', binds_to=['FROM', 'WHERE'])
     def having(self, argument: str) -> 'Query':
         return self
+
 
     @purely_descriptive
     @sql_clause('ORDER BY', binds_to=['FROM', 'WHERE', 'HAVING'])
     def order_by(self, argument: str) -> 'Query':
         return self
 
+
     @purely_descriptive
     @sql_clause('LIMIT', binds_to=['FROM', 'WHERE', 'HAVING'])
     def limit(self, argument: str) -> 'Query':
         return self
 
+
     @sql_clause('INSERT INTO')
     def insert_into(self, argument: str) -> 'Query':
         return self
     
+
     @purely_descriptive
     @sql_clause('VALUES', binds_to=['INSERT INTO'])
     def values(self, argument: str) -> 'Query':
         return self
     
+
     @sql_clause('DELETE')
     def delete(self, argument: str) -> 'Query':
         return self
+
 
     def execute(self, *args) -> list[tuple] | int | str:
         if self._error_message:
@@ -121,7 +130,6 @@ class Query:
                 return result.lastrowid
             case QueryType.UPDATE | QueryType.DELETE:
                 return result.rowcount
-
 
 
 def query(conn: sqlite3.Connection) -> Query:
