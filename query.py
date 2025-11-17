@@ -1,5 +1,13 @@
 from dataclasses import dataclass
+from enum import Enum
 import sqlite3
+
+
+class QueryType(Enum):
+    SELECT = 0
+    INSERT = 1
+    UPDATE = 2
+    DELETE = 3
 
 
 @dataclass
