@@ -20,11 +20,11 @@ class Users:
 
     def validate(self, username: str, password: str) -> bool | None:
         if not self.exists(username): return False
-        
-        result = self.__db.fetch("""SELECT username, password_hash
-                                    FROM Users
-                                    WHERE username = ?
-                                    ;""", username)
+        result = query().select('username, password_hash') \
+                        .from_('Users') \
+                        .where('username = ?') \
+                        .execute(username) \
+                        .fetchall()
         if result == None: return False
         password_hash = result[0][1]
 
