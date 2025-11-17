@@ -25,7 +25,7 @@ class Query:
     def purely_descriptive(func: Callable[["Query", str], str]) -> Callable[["Query", str], str]:
         def wrapper(query: 'Query', argument: str) -> "Query":
             if not query._query_type:
-                query._error_message = True
+                query._error_message = 'Cannot start a query with a purely descriptive keyword.'
             else:
                 func(query, argument)
             return query
@@ -40,11 +40,11 @@ class Query:
                 
                 # If keyword has to be first but isn't.
                 if query._query_type and binds_to == [None]:
-                    query._error_message = True
+                    query._error_message = f'Keyword {keyword} must be first in a query'
 
                 # If the given argument is not a string.
                 if not isinstance(argument, str):
-                    query._error_message = True
+                    query._error_message = f'Clause argument cannot be of type {type(argument)}'
                 if not query._error_message:
                     if not query._query_type:
                         query._query_type = {
@@ -56,7 +56,6 @@ class Query:
                     query._query_list.append(keyword)
                     query._query_list.append(argument)
                 query._last_keyword = keyword
-                print(query)
                 return func(query, argument)
             return append_query
         return outer_wrapper
