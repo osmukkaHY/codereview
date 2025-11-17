@@ -29,16 +29,15 @@ class Users:
 
         return check_password_hash(password_hash, password)
 
-    
 
-    def add(self, username: str, password_hash: str) -> bool | None:
+    def add(self, username: str, password_hash: str) -> bool:
         if self.exists(username):
             return False
-        return self.__db.insert("""INSERT INTO
-                                      Users (username, password_hash)
-                                      VALUES (?, ?)""", username,
-                                                        password_hash)
-    
+        return True if query().insert_into('Users (username, password_hash)')  \
+                              .values('(?, ?)')                                \
+                              .execute(username, password_hash)                \
+                              .lastrowid                                       \
+        else False
 
     def delete(self, username: str, password: str) -> bool | None:
         if not self.exists(username):
