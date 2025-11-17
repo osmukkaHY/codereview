@@ -45,6 +45,18 @@ class Query:
     def where(self, argument: str) -> 'Query':
         return self
 
+    @sql_clause('HAVING')
+    def having(self, arguent: str) -> 'Query':
+        return self
+
+    @sql_clause('ORDER BY')
+    def order_by(self, arguent: str) -> 'Query':
+        return self
+
+    @sql_clause('LIMIT')
+    def limit(self, arguent: str) -> 'Query':
+        return self
+
     @sql_clause('INSERT INTO')
     def insert_into(self, argument: str) -> 'Query':
         return self
