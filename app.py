@@ -1,8 +1,9 @@
 from flask import Flask, render_template, request, session, flash, redirect
+from sqlite3 import Connection
 from werkzeug.security import generate_password_hash
 
-from config import secret
-from db import DB
+from config import secret, db_file
+from query import query
 from users import Users
 from posts import Posts
 
@@ -10,7 +11,7 @@ from posts import Posts
 app = Flask(__name__)
 app.secret_key = secret
 
-db = DB()
+conn = Connection(db_file)
 users = Users()
 posts = Posts()
 
@@ -106,8 +107,7 @@ def edit(post_id):
         return 'Forbidden'
     
     # Delete the old post
-    db.insert("""DELETE FROM Posts
-                 WHERE id = ?""", post.id)
+    query(conn).delete('').from_('Posts').where('id = ?').execute(post.id)
     return render_template('new-post-form.html', post=post)
 
 @app.route('/delete/<int:post_id>')
@@ -116,8 +116,7 @@ def delete(post_id):
     if post.username != session['username']:
         return 'Forbidden'
     
-    db.insert("""DELETE FROM Posts
-                 WHERE id = ?""", post.id)
+    query(conn).delete('').from_('Posts').where('id = ?').execute(post.id)
     flash('Post deleted!')
     return redirect('/')
 
