@@ -8,7 +8,14 @@ class Query:
     _query_list:   list[str]
     _error_status: bool = False
 
-
+    def select(self, argument: str):
+        if not isinstance(argument, str):
+            self._error_status = True
+            return self
+        
+        self._query_list.append('SELECT')
+        self._query_list.append(argument)
+        return self
 
 def query(conn: sqlite3.Connection) -> Query:
     return Query(conn, [])
