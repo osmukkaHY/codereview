@@ -6,6 +6,7 @@ import sqlite3
 class Query:
     _conn:         sqlite3.Connection
     _query_list:   list[str]
+    _error_status: bool = False
 
 
 
