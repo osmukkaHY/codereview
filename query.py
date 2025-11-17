@@ -37,6 +37,13 @@ class Query:
         self._query_list.append('WHERE')
         self._query_list.append(argument)
         return self
+    
+    def execute(self, *args) -> list[tuple] | None:
+        if self._error_status:
+            return None
+        
+        result = self._conn.execute(' '.join(self._query_list), args).fetchall()
+        return result
 
 
 def query(conn: sqlite3.Connection) -> Query:
