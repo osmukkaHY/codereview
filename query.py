@@ -14,7 +14,8 @@ class QueryType(Enum):
 class Query:
     _conn:         sqlite3.Connection
     _query_list:   list[str]
-    _error_status: bool = False
+    _query_type:   QueryType   = None
+    _error_status: bool        = False
 
     def select(self, argument: str):
         if not isinstance(argument, str):
