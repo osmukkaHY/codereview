@@ -11,6 +11,7 @@ class Query:
     def select(self, argument: str):
         if not isinstance(argument, str):
             self._error_status = True
+        if self._error_status:
             return self
         
         self._query_list.append('SELECT')
@@ -20,6 +21,7 @@ class Query:
     def from_(self, argument: str):
         if not isinstance(argument, str):
             self._error_status = True
+        if self._error_status:
             return self
         
         self._query_list.append('FROM')
@@ -29,6 +31,7 @@ class Query:
     def where(self, argument: str):
         if not isinstance(argument, str):
             self._error_status = True
+        if self._error_status:
             return self
         
         self._query_list.append('WHERE')
