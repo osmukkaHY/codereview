@@ -10,12 +10,12 @@ class Users:
 
     
     def exists(self, username: str) -> bool:
-        result = query().select('1') \
-                        .from_('Users') \
-                        .where('username = ?') \
-                        .execute(username) \
-                        .fetchall()
-        return True if len(result) else False
+        return True if query().select('1')             \
+                              .from_('Users')          \
+                              .where('username = ?')   \
+                              .execute(username)       \
+                              .fetchone()              \
+        else False
     
 
     def validate(self, username: str, password: str) -> bool | None:
