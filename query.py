@@ -31,26 +31,18 @@ class Query:
             return self
         return wrapper
 
-    def from_(self, argument: str):
-        if not isinstance(argument, str):
-            self._error_status = True
-        if self._error_status:
-            return self
-        
-        self._query_list.append('FROM')
-        self._query_list.append(argument)
-        return self
+    @sql_clause
+    def select(self, argument: str):
+        return 'SELECT'
 
+    @sql_clause
+    def from_(self, argument: str):
+        return 'FROM'
+
+    @sql_clause
     def where(self, argument: str):
-        if not isinstance(argument, str):
-            self._error_status = True
-        if self._error_status:
-            return self
-        
-        self._query_list.append('WHERE')
-        self._query_list.append(argument)
-        return self
-    
+        return 'WHERE'
+
     def execute(self, *args) -> list[tuple] | None:
         if self._error_status:
             return None
