@@ -18,5 +18,5 @@ CREATE TABLE Reviews (
     ts TEXT DEFAULT (datetime('now')),
     reviewer_id INTEGER REFERENCES Users,
     post_id INTEGER REFERENCES Posts,
-    rating UNSIGNED TINYINT,
+    rating UNSIGNED TINYINT
 );
