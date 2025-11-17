@@ -3,6 +3,8 @@ from enum import Enum
 import sqlite3
 from typing import Callable
 
+from config import db_file
+
 
 class QueryType(Enum):
     SELECT = 0
@@ -122,6 +124,7 @@ class Query:
             return self._error_message
         
         result = self._conn.execute(' '.join(self._query_list), args)
+        self._conn.commit()
 
         match self._query_type:
             case QueryType.SELECT:
@@ -132,5 +135,5 @@ class Query:
                 return result.rowcount
 
 
-def query(conn: sqlite3.Connection) -> Query:
-    return Query(conn, [])
+def query() -> Query:
+    return Query(sqlite3.Connection(db_file), [])
