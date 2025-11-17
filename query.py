@@ -13,44 +13,65 @@ class QueryType(Enum):
 
 @dataclass
 class Query:
-    _conn:         sqlite3.Connection
-    _query_list:   list[str]
-    _query_type:   QueryType   = None
-    _last_keyword: str         = ''
-    _error_status: bool        = False
+    _conn:             sqlite3.Connection
+    _query_list:       list[str]
+    _query_type:       QueryType   = None
+    _last_keyword:     str         = None
+    _error_message:    str         = None
+ 
+    """Tells that the clause cant be the root of a SQL query.
+    """
+    @staticmethod
+    def purely_descriptive(func: Callable[["Query", str], str]) -> Callable[["Query", str], str]:
+        def wrapper(query: 'Query', argument: str) -> "Query":
+            if not query._query_type:
+                query._error_status = True
+            else:
+                func(query, argument)
+            return query
+        return wrapper
+                
 
     @staticmethod
     def sql_clause(keyword: str, binds_to: list[str]=None) -> Callable[['Query', str], 'Query']:
-        binds_to = [] if not binds_to else binds_to
+        binds_to = [None] if not binds_to else binds_to
         def outer_wrapper (func: Callable[["Query", str], str]) -> Callable[["Query", str], "Query"]:
             def append_query(query: "Query", argument: str) -> "Query":
-                # If the keyword has to be first in the query but it isn't. 
-                if not len(binds_to) and query._query_type:
-                    query._error_status = True
-
-                # If the last keyword is a wrong one.
-                elif query._last_keyword not in binds_to:
+                
+                # If keyword has to be first but isn't.
+                if query._query_type and binds_to == [None]:
                     query._error_status = True
 
                 # If the given argument is not a string.
-                elif not isinstance(argument, str):
+                if not isinstance(argument, str):
                     query._error_status = True
                 if not query._error_status:
+                    if not query._query_type:
+                        query._query_type = {
+                            'SELECT': QueryType.SELECT,
+                            'INSERT': QueryType.INSERT,
+                            'UPDATE': QueryType.UPDATE,
+                            'DELETE': QueryType.DELETE
+                        }[keyword]
                     query._query_list.append(keyword)
                     query._query_list.append(argument)
+                query._last_keyword = keyword
+                print(query)
                 return func(query, argument)
             return append_query
         return outer_wrapper
     
     
-    @sql_clause('SELECT')
+    @sql_clause('SELECT', binds_to=['DELETE'])
     def select(self, argument: str) -> 'Query':
         return self
 
+    @purely_descriptive
     @sql_clause('FROM', binds_to=['SELECT'])
     def from_(self, argument: str) -> 'Query':
         return self
 
+    @purely_descriptive
     @sql_clause('WHERE', binds_to=['FROM'])
     def where(self, argument: str) -> 'Query':
         return self
