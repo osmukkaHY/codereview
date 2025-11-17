@@ -45,7 +45,10 @@ class Query:
                 # If the given argument is not a string.
                 if not isinstance(argument, str):
                     query._error_message = f'Clause argument cannot be of type {type(argument)}'
+
+                # append the clause if no errors were found.
                 if not query._error_message:
+                    # @purely_descriptive makes sure this triggers only on correct keywords.
                     if not query._query_type:
                         query._query_type = {
                             'SELECT': QueryType.SELECT,
@@ -55,6 +58,7 @@ class Query:
                         }[keyword]
                     query._query_list.append(keyword)
                     query._query_list.append(argument)
+                
                 query._last_keyword = keyword
                 return func(query, argument)
             return append_query
@@ -75,14 +79,17 @@ class Query:
     def where(self, argument: str) -> 'Query':
         return self
 
+    @purely_descriptive
     @sql_clause('HAVING', binds_to=['FROM', 'WHERE'])
     def having(self, argument: str) -> 'Query':
         return self
 
+    @purely_descriptive
     @sql_clause('ORDER BY', binds_to=['FROM', 'WHERE', 'HAVING'])
     def order_by(self, argument: str) -> 'Query':
         return self
 
+    @purely_descriptive
     @sql_clause('LIMIT', binds_to=['FROM', 'WHERE', 'HAVING'])
     def limit(self, argument: str) -> 'Query':
         return self
@@ -91,6 +98,7 @@ class Query:
     def insert_into(self, argument: str) -> 'Query':
         return self
     
+    @purely_descriptive
     @sql_clause('VALUES', binds_to=['INSERT INTO'])
     def values(self, argument: str) -> 'Query':
         return self
