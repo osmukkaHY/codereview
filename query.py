@@ -61,12 +61,12 @@ class Query:
         return outer_wrapper
     
     
-    @sql_clause('SELECT', binds_to=['DELETE'])
+    @sql_clause('SELECT', binds_to=['INSERT INTO'])
     def select(self, argument: str) -> 'Query':
         return self
 
     @purely_descriptive
-    @sql_clause('FROM', binds_to=['SELECT'])
+    @sql_clause('FROM', binds_to=['SELECT', 'DELETE'])
     def from_(self, argument: str) -> 'Query':
         return self
 
@@ -75,23 +75,23 @@ class Query:
     def where(self, argument: str) -> 'Query':
         return self
 
-    @sql_clause('HAVING')
-    def having(self, arguent: str) -> 'Query':
+    @sql_clause('HAVING', binds_to=['FROM', 'WHERE'])
+    def having(self, argument: str) -> 'Query':
         return self
 
-    @sql_clause('ORDER BY')
-    def order_by(self, arguent: str) -> 'Query':
+    @sql_clause('ORDER BY', binds_to=['FROM', 'WHERE', 'HAVING'])
+    def order_by(self, argument: str) -> 'Query':
         return self
 
-    @sql_clause('LIMIT')
-    def limit(self, arguent: str) -> 'Query':
+    @sql_clause('LIMIT', binds_to=['FROM', 'WHERE', 'HAVING'])
+    def limit(self, argument: str) -> 'Query':
         return self
 
     @sql_clause('INSERT INTO')
     def insert_into(self, argument: str) -> 'Query':
         return self
     
-    @sql_clause('VALUES')
+    @sql_clause('VALUES', binds_to=['INSERT INTO'])
     def values(self, argument: str) -> 'Query':
         return self
     
