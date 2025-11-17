@@ -80,7 +80,8 @@ def new_post_form():
 
 @app.route('/create-new-post', methods=['POST', 'GET'])
 def create_new_post():
-    posts.new(session['username'],
+    id = query().select('id').from_('Users').where('username = ?').execute(session['username']).fetchone()[0]
+    posts.new(id,
               request.form['title'],
               request.form['context'],
               request.form['content'])
