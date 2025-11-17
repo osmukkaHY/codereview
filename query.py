@@ -21,7 +21,7 @@ class Query:
     @staticmethod
     def sql_clause(keyword: str) -> Callable[['Query', str], 'Query']:
         def outer_wrapper (func: Callable[["Query", str], str]) -> Callable[["Query", str], "Query"]:
-            def modify_query(query: "Query", argument: str) -> "Query":
+            def append_query(query: "Query", argument: str) -> "Query":
                 if not isinstance(argument, str):
                     query._error_status = True
 
@@ -29,7 +29,7 @@ class Query:
                     query._query_list.append(keyword)
                     query._query_list.append(argument)
                 return func(query, argument)
-            return modify_query
+            return append_query
         return outer_wrapper
         
 
