@@ -5,7 +5,7 @@ from query import query
 
 
     
-def user_exists(username: str) -> bool:
+def exists(username: str) -> bool:
     return True if query().select('1')             \
                           .from_('Users')          \
                           .where('username = ?')   \
@@ -14,20 +14,20 @@ def user_exists(username: str) -> bool:
     else False
 
 
-def validate_user(username: str, password: str) -> bool:
-    if not user_exists(username):
+def validate(username: str, password: str) -> bool:
+    if not exists(username):
         return False
     password_hash = query().select('username, password_hash')  \
                            .from_('Users')                     \
                            .where('username = ?')              \
                            .execute(username)                  \
-                            .fetchone()[1]
+                           .fetchone()[1]
 
     return check_password_hash(password_hash, password)
 
 
-def create_user(username: str, password_hash: str) -> bool:
-    if user_exists(username):
+def create(username: str, password_hash: str) -> bool:
+    if exists(username):
         return False
     return True if query().insert_into('Users (username, password_hash)')  \
                           .values('(?, ?)')                                \
@@ -37,7 +37,7 @@ def create_user(username: str, password_hash: str) -> bool:
 
 
 def delete(username: str) -> bool:
-    if not user_exists(username):
+    if not exists(username):
         return False
     
     return True if query().delete('')              \
