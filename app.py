@@ -4,7 +4,7 @@ from werkzeug.security import generate_password_hash
 
 from config import secret, db_file
 from query import query
-from users import Users
+import users
 from posts import Posts
 
 
@@ -12,7 +12,6 @@ app = Flask(__name__)
 app.secret_key = secret
 
 conn = Connection(db_file)
-users = Users()
 posts = Posts()
 
 
@@ -59,7 +58,7 @@ def signup():
         flash('The passwords you have given don\'t match.')
         return render_template('signup_form.html')
 
-    users.add(username, generate_password_hash(password))
+    users.create(username, generate_password_hash(password))
     flash('User successfully created!')
     return render_template('signup-form.html')
 
