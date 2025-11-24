@@ -70,13 +70,17 @@ class Posts:
 
 
     def by_user(self, username: str) -> list[Post]:
-        post_tuples = self._db.fetch("""SELECT *
-                                        FROM Posts
-                                        WHERE username = ?;""", username)
-        posts = []
-        for post in post_tuples:
-            posts.append(Post(post[0], post[1], username, post[3], post[4], post[5]))
-        return posts
+        post_tuples = query().select('id, ts, poster_id, title, context, content')  \
+                             .from_('Posts')                                        \
+                             .where('username = ?')                                 \
+                             .execute(username)                                     \
+                             .fetchall()
+        return [Post(post[0],
+                     post[1],
+                     username(post[2]),
+                     post[3],
+                     post[4],
+                     post[5]) for post in post_tuples]
 
 
     def search(self, keyword: str) -> Post | None:
