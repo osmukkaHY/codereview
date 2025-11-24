@@ -30,17 +30,22 @@ class Posts:
 
 
     def by_id(self, id: int) -> Post | None:
-        post_tuples = self._db.fetch("""SELECT *
-                                       FROM Posts
-                                       WHERE id = ?;""", id)
-        print(post_tuples)
-        if not len(post_tuples):
+        post = query().select('id, ts, poster_id, title, context, content')  \
+                             .from_('posts')                                        \
+                             .where('id = ?')                                       \
+                             .execute(id)                                           \
+                             .fetchone()
+        if not post:
             return None
-        post = post_tuples[0]
-        username = self._db.fetch("""SELECT username
-                                     FROM Users
-                                     WHERE id = ?;""", post[2])[0][0]
-        
+
+        username = query().select('username')   \
+                          .from_('Users')       \
+                          .where('id = ?')      \
+                          .execute(post[2])     \
+                          .fetchone()[0]
+        if not username:
+            return None
+
         return Post(post[0], post[1], username, post[3], post[4], post[5])
 
 
