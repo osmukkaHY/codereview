@@ -50,17 +50,23 @@ class Posts:
 
 
     def n_recent(self, n: int):
-        post_tuples = self._db.fetch("""SELECT *
-                                        FROM Posts
-                                        ORDER BY ts
-                                        LIMIT ?;""", n)
-        posts = []
-        for post in post_tuples:
-            username = self._db.fetch("""SELECT username
-                                         FROM Users
-                                         WHERE id = ?;""", post[2])[0][0]
-            posts.append(Post(post[0], post[1], username, post[3], post[4], post[5]))
-        return posts
+        post_tuples = query().select('id, ts, poster_id, title, context, content') \
+                       .from_('Posts')                                      \
+                       .order_by('ts')                                      \
+                       .limit('?')                                          \
+                       .execute(n)                                           \
+                       .fetchall()
+        username = lambda id: query().select('username')  \
+                                     .from_('Users')      \
+                                     .where('id = ?')     \
+                                     .execute(id)         \
+                                     .fetchone()[0]
+        return [Post(post[0],
+                     post[1],
+                     username(post[2]),
+                     post[3],
+                     post[4],
+                     post[5]) for post in post_tuples]
 
 
     def by_user(self, username: str) -> list[Post]:
