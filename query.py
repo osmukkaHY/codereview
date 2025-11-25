@@ -70,12 +70,12 @@ class Query:
 
 
     @sql_clause('UPDATE')
-    def delete(self, argument: str) -> 'Query':
+    def update(self, argument: str) -> 'Query':
         return self
 
 
     @sql_clause('SET')
-    def delete(self, argument: str) -> 'Query':
+    def set(self, argument: str) -> 'Query':
         return self
         
 
