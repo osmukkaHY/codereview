@@ -14,7 +14,7 @@
 
 {% if post.username == session['username'] %}
 <hr />
-<a href="/edit/{{ post.id }}">Edit</a> | 
+<a href="/edit-post-form/{{ post.id }}">Edit</a> | 
 <a href="/delete/{{ post.id }}">Delete</a>
 {% endif %}
 

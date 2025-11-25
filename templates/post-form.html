@@ -13,7 +13,7 @@
     <input type="submit" text="Post" />
   </form>
   {% else %}
-    <form action="/update-post/{{ post.id }}" method="post">
+    <form action="/edit-post/{{ post.id }}" method="post">
     <input type="text" name="title" placeholder="Title" size="32" value="{{ post.title }}"> </input> <br />
     <textarea name="context" placeholder="Tell about your code..." rows="8" cols="32">{{ post.context }}</textarea> <br />
     <textarea name="content" placeholder="Code here..." rows="32" cols="80">{{ post.content }}</textarea>
