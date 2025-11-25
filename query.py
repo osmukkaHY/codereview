@@ -69,6 +69,16 @@ class Query:
         return self
 
 
+    @sql_clause('UPDATE')
+    def delete(self, argument: str) -> 'Query':
+        return self
+
+
+    @sql_clause('SET')
+    def delete(self, argument: str) -> 'Query':
+        return self
+        
+
     def execute(self, *args) -> sqlite3.Cursor:
         with sqlite3.Connection(db_file) as conn:
             result = conn.execute(' '.join(self._query_list), args)
