@@ -29,6 +29,17 @@ class Posts:
                .execute(user_id, title, context, content)
 
 
+    def update(self,
+            post_id: str,
+            title: str,
+            context: str,
+            content: str) -> None:
+        query().update('Posts')                             \
+               .set("title = ?, context = ?, content = ?")  \
+               .where("id = ?")                             \
+               .execute(title, context, content, post_id)
+
+
     def by_id(self, id: int) -> Post | None:
         post = query().select('id, ts, poster_id, title, context, content')  \
                              .from_('posts')                                        \

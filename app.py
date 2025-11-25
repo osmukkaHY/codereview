@@ -88,14 +88,27 @@ def create_new_post():
     flash('New Post Added!')
     return redirect('/')
 
-app.route('/edit-post-form/<int:post_id>')
-def edit(post_id):
+@app.route('/edit-post-form/<int:post_id>', methods=['GET'])
+def edit_post_form(post_id):
     post = posts.by_id(post_id)
     if post.username != session['username']:
         return 'Forbidden'
     
     # Delete the old post
     return render_template('post-form.html', post=post)
+    
+@app.route('/edit-post/<int:post_id>', methods=['POST'])
+def edit(post_id):
+    post = posts.by_id(post_id)
+    if post.username != session['username']:
+        return 'Forbidden'
+    posts.update(post.id,
+                 request.form['title'],
+                 request.form['context'],
+                 request.form['content'])
+
+    flash('Update successful!')
+    return redirect(f'/post/{post_id}')
 
 @app.route('/post/<int:post_id>')
 def show_post(post_id):
