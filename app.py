@@ -6,6 +6,7 @@ from config import secret, db_file
 from query import query
 import user
 from posts import Posts
+from profile import Profile
 
 
 app = Flask(__name__)
@@ -134,4 +135,23 @@ def delete(post_id):
     query().delete('').from_('Posts').where('id = ?').execute(post.id)
     flash('Post deleted!')
     return redirect('/')
+
+@app.route('/profile/<string:username>')
+def profile_page(username):
+    if not user.exists(username):
+        return f'User {username} doesn\'t exist.'
+
+    user_id = query().select('id')          \
+                     .from_('Users')        \
+                     .where('username = ?') \
+                     .execute(username)     \
+                     .fetchone()[0]
+    
+    post_count = query().select("COUNT(*)")     \
+                        .from_("posts")         \
+                        .where('poster_id = ?') \
+                        .execute(user_id)       \
+                        .fetchone()[0]
+    
+    return render_template('profile.html', profile=Profile(username, post_count))
 
