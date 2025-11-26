@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{%block title%}{{ profile.username }}'s profile{% endblock %}
+
+{% block body %}
+{% if profile.username == session.username% }
+<h2>Hello <em>{{ profile.username }}</em>!</h2>
+{% else %}
+<h2><em>{{ profile.username }}'s</em> Profile</h2>
+{% endif %}
+
+<b>Total posts:</b> {{ profile.post_count }} 
+{% endblock %}
+
