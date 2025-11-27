@@ -141,15 +141,19 @@ def profile_page(username):
     if not user.exists(username):
         return f'User {username} doesn\'t exist.'
 
-    user_id = query().select('id')          \
-                     .from_('Users')        \
-                     .where('username = ?') \
-                     .execute(username)     \
-                     .fetchone()[0]
+    user_id, join_date = query().select('id, ts')      \
+                                .from_('Users')        \
+                                .where('username = ?') \
+                                .execute(username)     \
+                                .fetchone()
     
     posts_ = posts.by_user(user_id)
     post_count = len(posts_)
-    print(posts_)
+    join_date = join_date[:10]
     
-    return render_template('profile.html', profile=Profile(username, post_count), post_previews=posts_)
+    return render_template('profile.html',
+                           profile=Profile(username,
+                                           post_count,
+                                           join_date=join_date),
+                           post_previews=posts_)
 

@@ -9,7 +9,9 @@
   <h2><em>{{ profile.username }}'s</em> Profile</h2>
   {% endif %}
 
-  <b>Total posts:</b> {{ profile.post_count }}
+  <b>Total posts:</b> {{ profile.post_count }} <br />
+  <b>User since:</b> {{ profile.join_date }} <br />
+
 
   {% if profile.username == session.username %}
     <h2>Your posts</h2>
