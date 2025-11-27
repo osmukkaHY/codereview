@@ -124,7 +124,7 @@ def search():
     if not results:
         results = []
     print(results)
-    return render_template('search-results.html', query=query, posts=results)
+    return render_template('search-results.html', query=query, post_previews=results)
 
 @app.route('/delete/<int:post_id>')
 def delete(post_id):
