@@ -1,5 +1,6 @@
 CREATE TABLE Users (
     id INTEGER PRIMARY KEY,
+    ts TEXT DEFAULT (datetime('now')),
     username TEXT UNIQUE NOT NULL,
     password_hash TEXT NOT NULL
 );
