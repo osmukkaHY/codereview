@@ -9,6 +9,23 @@
   <h2><em>{{ profile.username }}'s</em> Profile</h2>
   {% endif %}
 
-<b>Total posts:</b> {{ profile.post_count }} 
+  <b>Total posts:</b> {{ profile.post_count }}
+
+  {% if profile.username == session.username %}
+    <h2>Your posts</h2>
+  {% else %}
+    <h2>{{ profile.username }}'s posts</h2>
+  {% endif %}
+
+  <hr />
+  {% for post in post_previews %}
+    <p>
+      <a href="/post/{{ post.id }}">{{ post.title }}</a>  <br />
+      By {{ post.username }}
+    </p>
+    <hr />
+  {% endfor %}
+
+
 {% endblock %}
 

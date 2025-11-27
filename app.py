@@ -147,11 +147,9 @@ def profile_page(username):
                      .execute(username)     \
                      .fetchone()[0]
     
-    post_count = query().select("COUNT(*)")     \
-                        .from_("posts")         \
-                        .where('poster_id = ?') \
-                        .execute(user_id)       \
-                        .fetchone()[0]
+    posts_ = posts.by_user(user_id)
+    post_count = len(posts_)
+    print(posts_)
     
-    return render_template('profile.html', profile=Profile(username, post_count))
+    return render_template('profile.html', profile=Profile(username, post_count), post_previews=posts_)
 

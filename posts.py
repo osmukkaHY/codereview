@@ -80,12 +80,18 @@ class Posts:
                      post[5]) for post in post_tuples]
 
 
-    def by_user(self, username: str) -> list[Post]:
+    def by_user(self, user_id: str) -> list[Post]:
         post_tuples = query().select('id, ts, poster_id, title, context, content')  \
                              .from_('Posts')                                        \
-                             .where('username = ?')                                 \
-                             .execute(username)                                     \
+                             .where('poster_id = ?')                                \
+                             .order_by('ts')                                        \
+                             .execute(user_id)                                      \
                              .fetchall()
+        username = lambda id: query().select('username')  \
+                                     .from_('Users')      \
+                                     .where('id = ?')     \
+                                     .execute(id)         \
+                                     .fetchone()[0]
         return [Post(post[0],
                      post[1],
                      username(post[2]),
