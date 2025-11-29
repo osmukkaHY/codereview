@@ -17,6 +17,7 @@ CREATE TABLE Posts (
 CREATE TABLE Comments (
     id INTEGER PRIMARY KEY,
     ts TEXT DEFAULT (datetime('now')),
+    content TEXT NOT NULL,
     commenter_id INTEGER REFERENCES Users,
     post_id INTEGER REFERENCES Posts
 );
