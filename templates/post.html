@@ -17,5 +17,15 @@
 <a href="/edit-post-form/{{ post.id }}">Edit</a> | 
 <a href="/delete/{{ post.id }}">Delete</a>
 {% endif %}
+<br />
+
+<form>
+  <h2>Add comment:</h2>
+  <textarea name="comment-text" placeholder="Comment..." rows="4" cols="32"></textarea> <br />
+  <input type="submit" value="Comment" />
+</form>
+
+{% include "comment-list.html" %}
+
 
 {% endblock %}
