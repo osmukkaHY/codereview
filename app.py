@@ -5,6 +5,7 @@ from werkzeug.security import generate_password_hash
 from config import secret, db_file
 from query import query
 import user
+import comments
 from posts import Posts
 from profile import Profile
 
@@ -114,8 +115,9 @@ def edit(post_id):
 @app.route('/post/<int:post_id>')
 def show_post(post_id):
     post = posts.by_id(post_id)
+    comment_list = comments.get_post_comments(post_id)
     print(post.content)
-    return render_template('post.html', post=post)
+    return render_template('post.html', post=post, comments=comment_list)
 
 @app.route('/search')
 def search():
