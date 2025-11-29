@@ -14,10 +14,9 @@ CREATE TABLE Posts (
     content TEXT NOT NULL
 );
 
-CREATE TABLE Reviews (
+CREATE TABLE Comments (
     id INTEGER PRIMARY KEY,
     ts TEXT DEFAULT (datetime('now')),
-    reviewer_id INTEGER REFERENCES Users,
-    post_id INTEGER REFERENCES Posts,
-    rating UNSIGNED TINYINT
+    commenter_id INTEGER REFERENCES Users,
+    post_id INTEGER REFERENCES Posts
 );
