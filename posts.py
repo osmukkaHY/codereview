@@ -9,6 +9,7 @@ class Post:
     id:         str
     timestamp:  str
     username:   str
+    language:   str
     title:      str
     context:    str
     content:    str
@@ -21,27 +22,29 @@ class Posts:
 
     def new(self,
             user_id: str,
+            language: str,
             title: str,
             context: str,
             content: str) -> None:
-        query().insert_into('Posts (poster_id, title, context, content)')  \
-               .values('(?, ?, ?, ?)')                                     \
-               .execute(user_id, title, context, content)
+        query().insert_into('Posts (poster_id, lang, title, context, content)')  \
+               .values('(?, ?, ?, ?, ?)')                                     \
+               .execute(user_id, language, title, context, content)
 
 
     def update(self,
             post_id: str,
+            language: str,
             title: str,
             context: str,
             content: str) -> None:
         query().update('Posts')                             \
-               .set("title = ?, context = ?, content = ?")  \
+               .set("lang = ?, title = ?, context = ?, content = ?")  \
                .where("id = ?")                             \
-               .execute(title, context, content, post_id)
+               .execute(language, title, context, content, post_id)
 
 
     def by_id(self, id: int) -> Post | None:
-        post = query().select('id, ts, poster_id, title, context, content')  \
+        post = query().select('id, ts, poster_id, lang, title, context, content')  \
                              .from_('posts')                                        \
                              .where('id = ?')                                       \
                              .execute(id)                                           \
@@ -57,11 +60,11 @@ class Posts:
         if not username:
             return None
 
-        return Post(post[0], post[1], username, post[3], post[4], post[5])
+        return Post(post[0], post[1], username, post[3], post[4], post[5], post[6])
 
 
     def n_recent(self, n: int):
-        post_tuples = query().select('id, ts, poster_id, title, context, content') \
+        post_tuples = query().select('id, ts, poster_id, lang, title, context, content') \
                        .from_('Posts')                                      \
                        .order_by('ts')                                      \
                        .limit('?')                                          \
@@ -77,11 +80,12 @@ class Posts:
                      username(post[2]),
                      post[3],
                      post[4],
-                     post[5]) for post in post_tuples]
+                     post[5],
+                     post[6]) for post in post_tuples]
 
 
     def by_user(self, user_id: str) -> list[Post]:
-        post_tuples = query().select('id, ts, poster_id, title, context, content')  \
+        post_tuples = query().select('id, ts, poster_id, lang, title, context, content')  \
                              .from_('Posts')                                        \
                              .where('poster_id = ?')                                \
                              .order_by('ts')                                        \
@@ -97,14 +101,15 @@ class Posts:
                      username(post[2]),
                      post[3],
                      post[4],
-                     post[5]) for post in post_tuples]
+                     post[5],
+                     post[6]) for post in post_tuples]
 
 
-    def search(self, keyword: str) -> Post | None:
-        post_tuples = query().select('id, ts, poster_id, title, context, content')  \
+    def search(self, keyword: str, language: str) -> Post | None:
+        post_tuples = query().select('id, ts, poster_id, lang, title, context, content')  \
                              .from_('Posts')                                        \
-                             .where('content LIKE ?')                               \
-                             .execute('%'+keyword+'%')                              \
+                             .where('content LIKE ?' + ' AND lang LIKE ?')             \
+                             .execute('%'+keyword+'%', language)                              \
                              .fetchall()
         if not len(post_tuples):
             return None
@@ -119,4 +124,5 @@ class Posts:
                      username(post[2]),
                      post[3],
                      post[4],
-                     post[5]) for post in post_tuples]
+                     post[5],
+                     post[6]) for post in post_tuples]

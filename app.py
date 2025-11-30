@@ -86,6 +86,7 @@ def new_post_form():
 def create_new_post():
     id = query().select('id').from_('Users').where('username = ?').execute(session['username']).fetchone()[0]
     posts.new(id,
+              request.form['language'],
               request.form['title'],
               request.form['context'],
               request.form['content'])
@@ -109,6 +110,7 @@ def edit(post_id):
     if post.username != session['username']:
         return 'Forbidden'
     posts.update(post.id,
+                 request.form['language'],
                  request.form['title'],
                  request.form['context'],
                  request.form['content'])
@@ -128,7 +130,10 @@ def show_post(post_id):
 @app.route('/search')
 def search():
     query = request.args.get('query')
-    results = posts.search(query)
+    language = request.args.get('language')
+    if language == 'any':
+        language = '%'
+    results = posts.search(query, language)
     if not results:
         results = []
     print(results)
