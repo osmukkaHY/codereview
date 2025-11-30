@@ -35,3 +35,7 @@ Ohjelma luo automaattisesti tietokannan ja secretin tarvittaessa ohjelman käynn
     * Tällä hetkellä poistamisnappi poistaa postauksen ilman varoitusta.
     * Edit-nappi toimii tällä hetkellä niin, että se kopioi vanhan postauksen sisällön uuden postauksen luomisformiin ja poistaa vanhan postauksen,
       eli jos menee muokkaamaan postausta ja menee pois ikkunasta, poistuu kyseinen postaus tietokannasta.
+
+  * You can now filter search results by language from the drop down menu next to the search button.
+  * You can also view your profile by pressing the button from the navigation section.
+  * You can also add comments to posts when viewing a post.
