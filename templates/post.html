@@ -19,7 +19,7 @@
 {% endif %}
 <br />
 
-<form>
+<form action="/add-comment/{{ post.id }}">
   <h2>Add comment:</h2>
   <textarea name="comment-text" placeholder="Comment..." rows="4" cols="32"></textarea> <br />
   <input type="submit" value="Comment" />

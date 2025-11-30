@@ -74,11 +74,13 @@ def logout():
         del session['username']
     return render_template('index.html')
 
+
 @app.route('/new-post-form')
 def new_post_form():
     if session['username']:
         return render_template('post-form.html', post=None)
     return 'Forbidden'
+
 
 @app.route('/create-new-post', methods=['POST', 'GET'])
 def create_new_post():
@@ -90,6 +92,7 @@ def create_new_post():
     flash('New Post Added!')
     return redirect('/')
 
+
 @app.route('/edit-post-form/<int:post_id>', methods=['GET'])
 def edit_post_form(post_id):
     post = posts.by_id(post_id)
@@ -98,7 +101,8 @@ def edit_post_form(post_id):
     
     # Delete the old post
     return render_template('post-form.html', post=post)
-    
+
+
 @app.route('/edit-post/<int:post_id>', methods=['POST'])
 def edit(post_id):
     post = posts.by_id(post_id)
@@ -112,12 +116,14 @@ def edit(post_id):
     flash('Update successful!')
     return redirect(f'/post/{post_id}')
 
+
 @app.route('/post/<int:post_id>')
 def show_post(post_id):
     post = posts.by_id(post_id)
     comment_list = comments.get_post_comments(post_id)
     print(post.content)
     return render_template('post.html', post=post, comments=comment_list)
+
 
 @app.route('/search')
 def search():
@@ -128,6 +134,7 @@ def search():
     print(results)
     return render_template('search-results.html', query=query, post_previews=results)
 
+
 @app.route('/delete/<int:post_id>')
 def delete(post_id):
     post = posts.by_id(post_id)
@@ -137,6 +144,7 @@ def delete(post_id):
     query().delete('').from_('Posts').where('id = ?').execute(post.id)
     flash('Post deleted!')
     return redirect('/')
+
 
 @app.route('/profile/<string:username>')
 def profile_page(username):
@@ -158,4 +166,9 @@ def profile_page(username):
                                            post_count,
                                            join_date=join_date),
                            post_previews=posts_)
+
+
+@route('/add-comment/<int:post_id>')
+def add_comment(post_id):
+
 
