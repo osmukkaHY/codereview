@@ -9,13 +9,19 @@
   <a href="/">Front Page</a> | 
   {% if session.username %}
     <a href="/logout">Log Out</a> | 
-    <a href="/new-post-form">New Post</a>
+    <a href="/profile/{{ session.username }}">Your Profile</a>
+    <a href="/new-post-form">New Post</a> | 
   {% else %}
     <a href="/login-form">Log In</a> | 
     <a href="/signup-form">Sign Up</a>
   {% endif %}
   <form action="/search" method="get">
     <input type="text" name="query" size="16" />
+    <select name="language">
+      <option value="any">Any</option>
+      <option value="python">Python</option>
+      <option value="C">C</option>
+    </select>
     <input type="submit" value="Search" />
   </form>
 

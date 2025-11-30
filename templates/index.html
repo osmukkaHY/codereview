@@ -15,13 +15,7 @@
   <p>Welcome back {{ session.username }}! </p>
   <p>Here's some recent posts:</p>
   <hr />
-  {% for post in post_previews %}
-    <p>
-      <a href="/post/{{ post.id }}">{{ post.title }}</a>  <br />
-      By {{ post.username }}
-    </p>
-    <hr />
-  {% endfor %}
+  {% include "post-list.html" %}
 {% else %}
   <p>Welcome to Codereview!</p>
 {% endif %}

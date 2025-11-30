@@ -44,4 +44,3 @@ class DB:
             print('DB.execute: '
                  f'Couldn\'t execute query "{query}" with arguments {args}')
             return None
-
