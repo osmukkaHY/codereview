@@ -168,7 +168,20 @@ def profile_page(username):
                            post_previews=posts_)
 
 
-@route('/add-comment/<int:post_id>')
+@app.route('/add-comment/<int:post_id>', methods=['POST'])
 def add_comment(post_id):
+    username = request.form['commenter-username']
+    if username != session['username']:
+        return 'Forbidden'
+    
+    content = request.form['comment-text']
 
+    commenter_id = query().select("id")             \
+                          .from_("Users")           \
+                          .where("username = ?")    \
+                          .execute(username)        \
+                          .fetchone()[0]
 
+    comments.add_comment(content, commenter_id, post_id)
+
+    return redirect(f'/post/{post_id}')

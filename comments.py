@@ -10,7 +10,7 @@ class Comment:
     content: str
 
 
-def get_post_comments(post_id) -> list[Comment]:
+def get_post_comments(post_id: int) -> list[Comment]:
     comment_tuples = query().select("ts, content, commenter_id")    \
                             .from_("Comments")                      \
                             .where("post_id = ?")                   \
@@ -28,3 +28,10 @@ def get_post_comments(post_id) -> list[Comment]:
         comments.append(Comment(commenter, comment[0], comment[1]))
 
     return comments
+
+
+def add_comment(content, commenter_id, post_id) -> None:
+    query().insert_into("Comments (content, commenter_id, post_id)")    \
+           .values("(?, ?, ?)")                                         \
+           .execute(content, commenter_id, post_id)
+

@@ -19,9 +19,10 @@
 {% endif %}
 <br />
 
-<form action="/add-comment/{{ post.id }}">
+<form action="/add-comment/{{ post.id }}" method='post'>
   <h2>Add comment:</h2>
   <textarea name="comment-text" placeholder="Comment..." rows="4" cols="32"></textarea> <br />
+  <input type="hidden" name="commenter-username" value="{{ session.username }}" />
   <input type="submit" value="Comment" />
 </form>
 
