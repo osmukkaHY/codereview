@@ -2,6 +2,7 @@ from dataclasses import dataclass
 
 from db import DB
 from query import query
+import user
 
 
 @dataclass
@@ -70,14 +71,9 @@ class Posts:
                        .limit('?')                                          \
                        .execute(n)                                           \
                        .fetchall()
-        username = lambda id: query().select('username')  \
-                                     .from_('Users')      \
-                                     .where('id = ?')     \
-                                     .execute(id)         \
-                                     .fetchone()[0]
         return [Post(post[0],
                      post[1],
-                     username(post[2]),
+                     user.uname(post[2]),
                      post[3],
                      post[4],
                      post[5],
@@ -91,14 +87,9 @@ class Posts:
                              .order_by('ts')                                        \
                              .execute(user_id)                                      \
                              .fetchall()
-        username = lambda id: query().select('username')  \
-                                     .from_('Users')      \
-                                     .where('id = ?')     \
-                                     .execute(id)         \
-                                     .fetchone()[0]
         return [Post(post[0],
                      post[1],
-                     username(post[2]),
+                     user.uname(post[2]),
                      post[3],
                      post[4],
                      post[5],
@@ -114,14 +105,9 @@ class Posts:
         if not len(post_tuples):
             return None
         
-        username = lambda id: query().select('username')  \
-                                     .from_('Users')      \
-                                     .where('id = ?')     \
-                                     .execute(id)         \
-                                     .fetchone()[0]
         return [Post(post[0],
                      post[1],
-                     username(post[2]),
+                     user.uname(post[2]),
                      post[3],
                      post[4],
                      post[5],
