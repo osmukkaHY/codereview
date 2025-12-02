@@ -56,7 +56,7 @@ def signup():
     if username == '' or password == '' or password_again == '':
         flash('Fields cannot be empty!')
         
-    elif user.exists(username):
+    elif user.exists(username=username):
         flash('Username has been taken.')
 
     elif password != password_again:
