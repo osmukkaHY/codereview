@@ -36,13 +36,13 @@ def create(username: str, password_hash: str) -> bool:
     else False
 
 
-def delete(username: str) -> bool:
-    if not exists(username):
+def delete(user_id: int) -> bool:
+    if not exists(user_id):
         return False
     
-    return True if query().delete('')              \
-                          .from_('Users')          \
-                          .where('username = ?')   \
-                          .execute(username)       \
-                          .rowcount                \
+    return True if query().delete('')           \
+                          .from_('Users')       \
+                          .where('user_id = ?') \
+                          .execute(user_id)     \
+                          .rowcount             \
     else False
