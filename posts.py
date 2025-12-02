@@ -21,7 +21,7 @@ class Posts:
 
 
     def new(self,
-            user_id: str,
+            user_id: int,
             language: str,
             title: str,
             context: str,
