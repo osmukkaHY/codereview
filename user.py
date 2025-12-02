@@ -5,12 +5,19 @@ from query import query
 
 
     
-def exists(username: str) -> bool:
-    return True if query().select('1')             \
-                          .from_('Users')          \
-                          .where('username = ?')   \
-                          .execute(username)       \
-                          .fetchone()              \
+def exists(username: str=None, user_id: int=None) -> bool:
+    actual_argument = username if username else \
+                      user_id  if user_id  else \
+                      None
+    if not actual_argument:
+        return False
+
+    cond = 'username = ?' if username else 'id = ?'
+    return True if query().select('1')              \
+                          .from_('Users')           \
+                          .where(cond)              \
+                          .execute(actual_argument) \
+                          .fetchone()               \
     else False
 
 
