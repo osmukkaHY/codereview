@@ -67,10 +67,10 @@ def uid(username: str) -> int | None:
 def uname(user_id: int) -> str | None:
     if not exists(user_id=user_id):
         return None
-    
+
     return query().select("username")       \
                   .from_("Users")           \
-                  .where("username = ?")    \
+                  .where("id = ?")    \
                   .execute(user_id)         \
                   .fetchone()[0]
 
