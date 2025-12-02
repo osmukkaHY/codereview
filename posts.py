@@ -2,14 +2,13 @@ from dataclasses import dataclass
 
 from db import DB
 from query import query
-import user
 
 
 @dataclass
 class Post:
     id:         str
     timestamp:  str
-    username:   str
+    poster_id:  int
     language:   str
     title:      str
     context:    str
@@ -53,15 +52,7 @@ class Posts:
         if not post:
             return None
 
-        username = query().select('username')   \
-                          .from_('Users')       \
-                          .where('id = ?')      \
-                          .execute(post[2])     \
-                          .fetchone()[0]
-        if not username:
-            return None
-
-        return Post(post[0], post[1], username, post[3], post[4], post[5], post[6])
+        return Post(post[0], post[1], post[2], post[3], post[4], post[5], post[6])
 
 
     def n_recent(self, n: int):
@@ -73,7 +64,7 @@ class Posts:
                        .fetchall()
         return [Post(post[0],
                      post[1],
-                     user.uname(post[2]),
+                     post[2],
                      post[3],
                      post[4],
                      post[5],
@@ -89,7 +80,7 @@ class Posts:
                              .fetchall()
         return [Post(post[0],
                      post[1],
-                     user.uname(post[2]),
+                     post[2],
                      post[3],
                      post[4],
                      post[5],
@@ -107,7 +98,7 @@ class Posts:
         
         return [Post(post[0],
                      post[1],
-                     user.uname(post[2]),
+                     post[2],
                      post[3],
                      post[4],
                      post[5],
