@@ -51,3 +51,26 @@ def delete(user_id: int) -> bool:
                           .execute(user_id)     \
                           .rowcount             \
     else False
+
+
+def uid(username: str) -> int | None:
+    if not exists(username=username):
+        return None
+    
+    return query().select("id")             \
+                  .from_("Users")           \
+                  .where("username = ?")    \
+                  .execute(username)        \
+                  .fetchone()[0]
+
+
+def uname(user_id: int) -> str | None:
+    if not exists(user_id=user_id):
+        return None
+    
+    return query().select("username")       \
+                  .from_("Users")           \
+                  .where("username = ?")    \
+                  .execute(user_id)         \
+                  .fetchone()[0]
+
