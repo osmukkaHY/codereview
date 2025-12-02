@@ -32,7 +32,7 @@ class Posts:
 
 
     def update(self,
-            post_id: str,
+            post_id: int,
             language: str,
             title: str,
             context: str,
