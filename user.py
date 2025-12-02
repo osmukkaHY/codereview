@@ -2,8 +2,6 @@ from werkzeug.security import check_password_hash
 
 from query import query
 
-
-
     
 def exists(username: str=None, user_id: int=None) -> bool:
     actual_argument = username if username else \
@@ -22,7 +20,7 @@ def exists(username: str=None, user_id: int=None) -> bool:
 
 
 def validate(username: str, password: str) -> bool:
-    if not exists(username):
+    if not exists(username=username):
         return False
     password_hash = query().select('username, password_hash')  \
                            .from_('Users')                     \
@@ -34,7 +32,7 @@ def validate(username: str, password: str) -> bool:
 
 
 def create(username: str, password_hash: str) -> bool:
-    if exists(username):
+    if exists(username=username):
         return False
     return True if query().insert_into('Users (username, password_hash)')  \
                           .values('(?, ?)')                                \
@@ -44,7 +42,7 @@ def create(username: str, password_hash: str) -> bool:
 
 
 def delete(user_id: int) -> bool:
-    if not exists(user_id):
+    if not exists(user_id=user_id):
         return False
     
     return True if query().delete('')           \
