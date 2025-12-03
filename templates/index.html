@@ -11,8 +11,8 @@
 </p>
 {% endfor %}
 
-{% if session.username %}
-  <p>Welcome back {{ session.username }}! </p>
+{% if session.user_id %}
+  <p>Welcome back {{ username }}! </p>
   <p>Here's some recent posts:</p>
   <hr />
   {% include "post-list.html" %}

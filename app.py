@@ -20,7 +20,8 @@ posts = Posts()
 @app.route('/')
 def index():
     post_previews = posts.n_recent(5)
-    return render_template('index.html', post_previews=post_previews)
+    print(post_previews)
+    return render_template('index.html', post_previews=post_previews, username=user.uname(session['user_id']))
 
 
 @app.route('/login-form', methods=['GET'])
@@ -37,7 +38,7 @@ def login():
         flash('Incorrect username or password.')
     else:
         flash('Login successful!')
-        session['username'] = username
+        session['user_id'] = user.uid(username)
     
     return redirect('/')
 
@@ -70,22 +71,24 @@ def signup():
 
 @app.route('/logout')
 def logout():
-    if 'username' in session:
-        del session['username']
+    if 'user_id' in session:
+        del session['user_id']
     return render_template('index.html')
 
 
 @app.route('/new-post-form')
 def new_post_form():
-    if session['username']:
+    if session['user_id']:
         return render_template('post-form.html', post=None)
     return 'Forbidden'
 
 
 @app.route('/create-new-post', methods=['POST', 'GET'])
 def create_new_post():
-    id = query().select('id').from_('Users').where('username = ?').execute(session['username']).fetchone()[0]
-    posts.new(id,
+    if not session['user_id']:
+        return 'Forbidden'
+
+    posts.new(session['user_id'],
               request.form['language'],
               request.form['title'],
               request.form['context'],
@@ -97,7 +100,7 @@ def create_new_post():
 @app.route('/edit-post-form/<int:post_id>', methods=['GET'])
 def edit_post_form(post_id):
     post = posts.by_id(post_id)
-    if post.username != session['username']:
+    if post.poster_id != session['user_id']:
         return 'Forbidden'
     
     # Delete the old post
@@ -107,7 +110,7 @@ def edit_post_form(post_id):
 @app.route('/edit-post/<int:post_id>', methods=['POST'])
 def edit(post_id):
     post = posts.by_id(post_id)
-    if post.username != session['username']:
+    if post.poster_id != session['user_id']:
         return 'Forbidden'
     posts.update(post.id,
                  request.form['language'],
@@ -143,7 +146,7 @@ def search():
 @app.route('/delete/<int:post_id>')
 def delete(post_id):
     post = posts.by_id(post_id)
-    if post.username != session['username']:
+    if post.poster_id != session['user_id']:
         return 'Forbidden'
     
     query().delete('').from_('Posts').where('id = ?').execute(post.id)
@@ -153,30 +156,31 @@ def delete(post_id):
 
 @app.route('/profile/<string:username>')
 def profile_page(username):
-    if not user.exists(username):
+    if not user.exists(username=username):
         return f'User {username} doesn\'t exist.'
 
-    user_id, join_date = query().select('id, ts')      \
-                                .from_('Users')        \
-                                .where('username = ?') \
-                                .execute(username)     \
-                                .fetchone()
-    
-    posts_ = posts.by_user(user_id)
-    post_count = len(posts_)
+    user_id = user.uid(username)
+    join_date = query().select('ts')        \
+                       .from_('Users')      \
+                       .where('id = ?')     \
+                       .execute(user_id)    \
+                       .fetchone()
     join_date = join_date[:10]
+
+    user_posts = posts.by_user(user_id)
+    post_count = len(user_posts)
     
     return render_template('profile.html',
                            profile=Profile(username,
                                            post_count,
                                            join_date=join_date),
-                           post_previews=posts_)
+                           post_previews=user_posts)
 
 
 @app.route('/add-comment/<int:post_id>', methods=['POST'])
 def add_comment(post_id):
     username = request.form['commenter-username']
-    if username != session['username']:
+    if user.uid(username) != session['user_id']:
         return 'Forbidden'
     
     content = request.form['comment-text']
