@@ -12,7 +12,8 @@ CREATE TABLE Posts (
     lang TEXT NOT NULL,
     title TEXT NOT NULL,
     context TEXT NOT NULL,
-    content TEXT NOT NULL
+    content TEXT NOT NULL,
+    poster_username TEXT NOT NULL
 );
 
 CREATE TABLE Comments (
