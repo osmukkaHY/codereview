@@ -21,7 +21,8 @@ posts = Posts()
 def index():
     post_previews = posts.n_recent(5)
     print(post_previews)
-    return render_template('index.html', post_previews=post_previews, username=user.uname(session['user_id']))
+    username = user.uname(session['user_id']) if 'user_id' in session else None 
+    return render_template('index.html', post_previews=post_previews, username=username)
 
 
 @app.route('/login-form', methods=['GET'])
@@ -179,7 +180,7 @@ def profile_page(username):
 
 @app.route('/add-comment/<int:post_id>', methods=['POST'])
 def add_comment(post_id):
-    username = request.form['commenter-username']
+    username = user.uname(request.form.get('commenter-id'))
     if user.uid(username) != session['user_id']:
         return 'Forbidden'
     
