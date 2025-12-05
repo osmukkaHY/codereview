@@ -155,17 +155,17 @@ def delete(post_id):
     return redirect('/')
 
 
-@app.route('/profile/<string:username>')
-def profile_page(username):
-    if not user.exists(username=username):
-        return f'User {username} doesn\'t exist.'
+@app.route('/profile/<int:user_id>')
+def profile_page(user_id):
+    if not user.exists(user_id=user_id):
+        return f'User id {user_id} doesn\'t exist.'
 
-    user_id = user.uid(username)
+    username = user.uname(user_id)
     join_date = query().select('ts')        \
                        .from_('Users')      \
                        .where('id = ?')     \
                        .execute(user_id)    \
-                       .fetchone()
+                       .fetchone()[0]
     join_date = join_date[:10]
 
     user_posts = posts.by_user(user_id)
