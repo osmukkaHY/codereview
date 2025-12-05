@@ -12,7 +12,7 @@
   {{ post.content }}
 </code>
 
-{% if post.username == session['username'] %}
+{% if post.poster_id == session['user_id'] %}
 <hr />
 <a href="/edit-post-form/{{ post.id }}">Edit</a> | 
 <a href="/delete/{{ post.id }}">Delete</a>
