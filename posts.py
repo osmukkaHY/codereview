@@ -3,11 +3,11 @@ from db import execute, query
 import user
 
 
-def new(user_id:   int,
-        language:  str,
-        title:     str,
-        context:   str,
-        content:   str) -> None:
+def new(user_id: int,
+        language: str,
+        title: str,
+        context: str,
+        content: str) -> None:
     username = user.uname(user_id)
     execute("""
             INSERT INTO Posts
@@ -17,11 +17,11 @@ def new(user_id:   int,
             """, user_id, language, title, context, content, username)
 
 
-def update(post_id:    int,
-            language:  str,
-            title:     str,
-            context:   str,
-            content:   str) -> None:
+def update(post_id: int,
+            language: str,
+            title: str,
+            context: str,
+            content: str) -> None:
     execute("""
             UPDATE Posts SET
               lang = ?, title = ?, context = ?, content = ?
