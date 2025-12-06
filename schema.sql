@@ -7,9 +7,9 @@ CREATE TABLE Users (
 
 CREATE TABLE Posts (
     id INTEGER PRIMARY KEY,
-    ts TEXT DEFAULT (datetime('now')),
+    timestamp TEXT DEFAULT (datetime('now')),
     poster_id INTEGER REFERENCES Users,
-    lang TEXT NOT NULL,
+    language TEXT NOT NULL,
     title TEXT NOT NULL,
     context TEXT NOT NULL,
     content TEXT NOT NULL,

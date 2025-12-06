@@ -8,6 +8,7 @@ class Comment:
     poster: str
     ts: str
     content: str
+    commenter_id: int
 
 
 def get_post_comments(post_id: int) -> list[Comment]:
@@ -25,7 +26,7 @@ def get_post_comments(post_id: int) -> list[Comment]:
                            .where("id = ?")     \
                            .execute(comment[2]) \
                            .fetchone()[0]
-        comments.append(Comment(commenter, comment[0], comment[1]))
+        comments.append(Comment(commenter, comment[0], comment[1], comment[2]))
 
     return comments
 

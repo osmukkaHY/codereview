@@ -30,7 +30,7 @@ class Posts:
         username = user.uname(user_id)
         execute("""
         INSERT INTO Posts
-          (poster_id, lang, title, context, content, poster_username)
+          (poster_id, language, title, context, content, poster_username)
         VALUES
           (?, ?, ?, ?, ?, ?)
         """, user_id, language, title, context, content, username)
@@ -54,9 +54,9 @@ class Posts:
         post = q("""
                  SELECT
                    id,
-                   ts,
+                   timestamp,
                    poster_id,
-                   lang,
+                   language,
                    title,
                    context,
                    content,
@@ -71,9 +71,9 @@ class Posts:
             return None
 
         return Post(post['id'],
-                    post['ts'],
+                    post['timestamp'],
                     post['poster_id'],
-                    post['lang'],
+                    post['language'],
                     post['title'],
                     post['context'],
                     post['content'],
@@ -83,19 +83,19 @@ class Posts:
     def n_recent(self, n: int):
         posts = q("""
                   SELECT
-                    id, ts, poster_id, lang, title, context, content,
+                    id, timestamp, poster_id, language, title, context, content,
                     poster_username
                   FROM
                     Posts
                   ORDER BY
-                    ts
+                    timestamp
                   LIMIT
                     ?
                   """, n)
         return [Post(post['id'],
-                    post['ts'],
+                    post['timestamp'],
                     post['poster_id'],
-                    post['lang'],
+                    post['language'],
                     post['title'],
                     post['context'],
                     post['content'],
@@ -105,19 +105,19 @@ class Posts:
     def by_user(self, user_id: str) -> list[Post]:
         posts = q("""
                   SELECT
-                    id, ts, poster_id, lang, title, context, content,
+                    id, timestamp, poster_id, language, title, context, content,
                     poster_username
                   FROM
                     Posts
                   WHERE
                     poster_id = ?
                   ORDER BY
-                    ts
+                    timestamp
                   """, user_id)
         return [Post(post['id'],
-                    post['ts'],
+                    post['timestamp'],
                     post['poster_id'],
-                    post['lang'],
+                    post['language'],
                     post['title'],
                     post['context'],
                     post['content'],
@@ -127,20 +127,19 @@ class Posts:
     def search(self, keyword: str, language: str) -> Post | None:
         posts = q("""
                   SELECT
-                    id, ts, poster_id, lang, title, context, content,
+                    id, timestamp, poster_id, language, title, context, content,
                     poster_username
                   FROM
                     Posts
                   WHERE
-                    content LIKE ? AND lang LIKE ?
+                    content LIKE ? AND language LIKE ?
                   """, '%'+keyword+'%', language)
         if not len(posts):
             return None
-        
         return [Post(post['id'],
-                    post['ts'],
+                    post['timestamp'],
                     post['poster_id'],
-                    post['lang'],
+                    post['language'],
                     post['title'],
                     post['context'],
                     post['content'],
