@@ -1,20 +1,5 @@
-from dataclasses import dataclass
-
-from db import execute, query as q
-from query import query
+from db import execute, query
 import user
-
-
-@dataclass
-class Post:
-    id:         str
-    timestamp:  str
-    poster_id:  int
-    language:   str
-    title:      str
-    context:    str
-    content:    str
-    username:   str
 
 
 class Posts:
@@ -37,11 +22,11 @@ class Posts:
 
 
     def update(self,
-            post_id: int,
-            language: str,
-            title: str,
-            context: str,
-            content: str) -> None:
+               post_id: int,
+               language: str,
+               title: str,
+               context: str,
+               content: str) -> None:
         execute("""
         UPDATE Posts SET
           lang = ?, title = ?, context = ?, content = ?
@@ -51,37 +36,19 @@ class Posts:
 
 
     def by_id(self, id: int) -> Post | None:
-        post = q("""
-                 SELECT
-                   id,
-                   timestamp,
-                   poster_id,
-                   language,
-                   title,
-                   context,
-                   content,
-                   poster_username
+        post = query("""
+                 SELECT id, timestamp, poster_id, language, title, context,
+                        content, poster_username
                  FROM
                    Posts
                  WHERE
                    id = ?
                  """, id)[0]
-
-        if not post:
-            return None
-
-        return Post(post['id'],
-                    post['timestamp'],
-                    post['poster_id'],
-                    post['language'],
-                    post['title'],
-                    post['context'],
-                    post['content'],
-                    post['poster_username'])
+        return post
 
 
     def n_recent(self, n: int):
-        posts = q("""
+        posts = query("""
                   SELECT
                     id, timestamp, poster_id, language, title, context, content,
                     poster_username
@@ -92,18 +59,10 @@ class Posts:
                   LIMIT
                     ?
                   """, n)
-        return [Post(post['id'],
-                    post['timestamp'],
-                    post['poster_id'],
-                    post['language'],
-                    post['title'],
-                    post['context'],
-                    post['content'],
-                    post['poster_username']) for post in posts]
-
+        return posts
 
     def by_user(self, user_id: str) -> list[Post]:
-        posts = q("""
+        posts = query("""
                   SELECT
                     id, timestamp, poster_id, language, title, context, content,
                     poster_username
@@ -114,18 +73,10 @@ class Posts:
                   ORDER BY
                     timestamp
                   """, user_id)
-        return [Post(post['id'],
-                    post['timestamp'],
-                    post['poster_id'],
-                    post['language'],
-                    post['title'],
-                    post['context'],
-                    post['content'],
-                    post['poster_username']) for post in posts]
-
+        return posts
 
     def search(self, keyword: str, language: str) -> Post | None:
-        posts = q("""
+        posts = query("""
                   SELECT
                     id, timestamp, poster_id, language, title, context, content,
                     poster_username
@@ -134,13 +85,4 @@ class Posts:
                   WHERE
                     content LIKE ? AND language LIKE ?
                   """, '%'+keyword+'%', language)
-        if not len(posts):
-            return None
-        return [Post(post['id'],
-                    post['timestamp'],
-                    post['poster_id'],
-                    post['language'],
-                    post['title'],
-                    post['context'],
-                    post['content'],
-                    post['poster_username']) for post in posts]
+        return posts
