@@ -69,7 +69,6 @@ class Posts:
 
         if not post:
             return None
-        print(type(post))
 
         return Post(post['id'],
                     post['ts'],
@@ -82,53 +81,67 @@ class Posts:
 
 
     def n_recent(self, n: int):
-        post_tuples = query().select('id, ts, poster_id, lang, title, context, content, poster_username') \
-                       .from_('Posts')                                      \
-                       .order_by('ts')                                      \
-                       .limit('?')                                          \
-                       .execute(n)                                           \
-                       .fetchall()
-        return [Post(post[0],
-                     post[1],
-                     post[2],
-                     post[3],
-                     post[4],
-                     post[5],
-                     post[6],
-                     post[7]) for post in post_tuples]
+        posts = q("""
+                  SELECT
+                    id, ts, poster_id, lang, title, context, content,
+                    poster_username
+                  FROM
+                    Posts
+                  ORDER BY
+                    ts
+                  LIMIT
+                    ?
+                  """, n)
+        return [Post(post['id'],
+                    post['ts'],
+                    post['poster_id'],
+                    post['lang'],
+                    post['title'],
+                    post['context'],
+                    post['content'],
+                    post['poster_username']) for post in posts]
 
 
     def by_user(self, user_id: str) -> list[Post]:
-        post_tuples = query().select('id, ts, poster_id, lang, title, context, content, poster_username')  \
-                             .from_('Posts')                                        \
-                             .where('poster_id = ?')                                \
-                             .order_by('ts')                                        \
-                             .execute(user_id)                                      \
-                             .fetchall()
-        return [Post(post[0],
-                     post[1],
-                     post[2],
-                     post[3],
-                     post[4],
-                     post[5],
-                     post[6],
-                     post[7]) for post in post_tuples]
+        posts = q("""
+                  SELECT
+                    id, ts, poster_id, lang, title, context, content,
+                    poster_username
+                  FROM
+                    Posts
+                  WHERE
+                    poster_id = ?
+                  ORDER BY
+                    ts
+                  """, user_id)
+        return [Post(post['id'],
+                    post['ts'],
+                    post['poster_id'],
+                    post['lang'],
+                    post['title'],
+                    post['context'],
+                    post['content'],
+                    post['poster_username']) for post in posts]
 
 
     def search(self, keyword: str, language: str) -> Post | None:
-        post_tuples = query().select('id, ts, poster_id, lang, title, context, content, poster_username')  \
-                             .from_('Posts')                                        \
-                             .where('content LIKE ?' + ' AND lang LIKE ?')             \
-                             .execute('%'+keyword+'%', language)                              \
-                             .fetchall()
-        if not len(post_tuples):
+        posts = q("""
+                  SELECT
+                    id, ts, poster_id, lang, title, context, content,
+                    poster_username
+                  FROM
+                    Posts
+                  WHERE
+                    content LIKE ? AND lang LIKE ?
+                  """, '%'+keyword+'%', language)
+        if not len(posts):
             return None
         
-        return [Post(post[0],
-                     post[1],
-                     post[2],
-                     post[3],
-                     post[4],
-                     post[5],
-                     post[6],
-                     post[7]) for post in post_tuples]
+        return [Post(post['id'],
+                    post['ts'],
+                    post['poster_id'],
+                    post['lang'],
+                    post['title'],
+                    post['context'],
+                    post['content'],
+                    post['poster_username']) for post in posts]
