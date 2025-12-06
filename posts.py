@@ -41,7 +41,7 @@ def by_id(id: int) -> Row:
                  """, id)[0]
 
 
-def n_recent(n: int):
+def n_recent(n: int) -> Row:
     return query("""
                  SELECT
                    id, timestamp, poster_id, language, title, context, content,
@@ -55,7 +55,7 @@ def n_recent(n: int):
                  """, n)
 
 
-def by_user(user_id: str):
+def by_user(user_id: str) -> Row:
     return query("""
                  SELECT
                    id, timestamp, poster_id, language, title, context, content,
@@ -69,7 +69,7 @@ def by_user(user_id: str):
                  """, user_id)
 
 
-def search(keyword: str, language: str):
+def search(keyword: str, language: str) -> Row:
     return query("""
                  SELECT
                    id, timestamp, poster_id, language, title, context, content,
