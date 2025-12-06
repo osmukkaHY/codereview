@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from db import DB
+from db import execute, query as q
 from query import query
 import user
 
@@ -19,8 +19,7 @@ class Post:
 
 class Posts:
     def __init__(self):
-        self._db = DB()
-
+        pass
 
     def new(self,
             user_id: int,
@@ -29,9 +28,12 @@ class Posts:
             context: str,
             content: str) -> None:
         username = user.uname(user_id)
-        query().insert_into('Posts (poster_id, lang, title, context, content, poster_username)')  \
-               .values('(?, ?, ?, ?, ?, ?)')                                     \
-               .execute(user_id, language, title, context, content, username)
+        execute("""
+        INSERT INTO Posts
+          (poster_id, lang, title, context, content, poster_username)
+        VALUES
+          (?, ?, ?, ?, ?, ?)
+        """, user_id, language, title, context, content, username)
 
 
     def update(self,
@@ -40,22 +42,43 @@ class Posts:
             title: str,
             context: str,
             content: str) -> None:
-        query().update('Posts')                             \
-               .set("lang = ?, title = ?, context = ?, content = ?")  \
-               .where("id = ?")                             \
-               .execute(language, title, context, content, post_id)
+        execute("""
+        UPDATE Posts SET
+          lang = ?, title = ?, context = ?, content = ?
+        WHERE
+          id = ?
+        """, language, title, context, content, post_id)
 
 
     def by_id(self, id: int) -> Post | None:
-        post = query().select('id, ts, poster_id, lang, title, context, content, poster_username')  \
-                             .from_('posts')                                        \
-                             .where('id = ?')                                       \
-                             .execute(id)                                           \
-                             .fetchone()
+        post = q("""
+                 SELECT
+                   id,
+                   ts,
+                   poster_id,
+                   lang,
+                   title,
+                   context,
+                   content,
+                   poster_username
+                 FROM
+                   Posts
+                 WHERE
+                   id = ?
+                 """, id)[0]
+
         if not post:
             return None
+        print(type(post))
 
-        return Post(post[0], post[1], post[2], post[3], post[4], post[5], post[6], post[7])
+        return Post(post['id'],
+                    post['ts'],
+                    post['poster_id'],
+                    post['lang'],
+                    post['title'],
+                    post['context'],
+                    post['content'],
+                    post['poster_username'])
 
 
     def n_recent(self, n: int):

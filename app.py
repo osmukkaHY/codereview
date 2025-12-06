@@ -127,7 +127,7 @@ def edit(post_id):
 def show_post(post_id):
     post = posts.by_id(post_id)
     comment_list = comments.get_post_comments(post_id)
-    print(post.content)
+    print(post, session['user_id'])
     return render_template('post.html', post=post, comments=comment_list)
 
 
