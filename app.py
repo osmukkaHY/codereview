@@ -6,7 +6,7 @@ from config import secret, db_file
 from query import query
 import user
 import comments
-from posts import Posts
+import posts
 from profile import Profile
 
 
@@ -14,7 +14,6 @@ app = Flask(__name__)
 app.secret_key = secret
 
 conn = Connection(db_file)
-posts = Posts()
 
 
 @app.route('/')

@@ -1,42 +1,37 @@
+from sqlite3 import Row
 from db import execute, query
 import user
 
 
-class Posts:
-    def __init__(self):
-        pass
+def new(user_id: int,
+        language: str,
+        title: str,
+        context: str,
+        content: str) -> None:
+    username = user.uname(user_id)
+    execute("""
+            INSERT INTO Posts
+              (poster_id, language, title, context, content, poster_username)
+            VALUES
+              (?, ?, ?, ?, ?, ?)
+            """, user_id, language, title, context, content, username)
 
-    def new(self,
-            user_id: int,
+
+def update(post_id: int,
             language: str,
             title: str,
             context: str,
             content: str) -> None:
-        username = user.uname(user_id)
-        execute("""
-        INSERT INTO Posts
-          (poster_id, language, title, context, content, poster_username)
-        VALUES
-          (?, ?, ?, ?, ?, ?)
-        """, user_id, language, title, context, content, username)
+    execute("""
+            UPDATE Posts SET
+              lang = ?, title = ?, context = ?, content = ?
+            WHERE
+              id = ?
+            """, language, title, context, content, post_id)
 
 
-    def update(self,
-               post_id: int,
-               language: str,
-               title: str,
-               context: str,
-               content: str) -> None:
-        execute("""
-        UPDATE Posts SET
-          lang = ?, title = ?, context = ?, content = ?
-        WHERE
-          id = ?
-        """, language, title, context, content, post_id)
-
-
-    def by_id(self, id: int) -> Post | None:
-        post = query("""
+def by_id(id: int) -> Row:
+    return query("""
                  SELECT id, timestamp, poster_id, language, title, context,
                         content, poster_username
                  FROM
@@ -44,45 +39,43 @@ class Posts:
                  WHERE
                    id = ?
                  """, id)[0]
-        return post
 
 
-    def n_recent(self, n: int):
-        posts = query("""
-                  SELECT
-                    id, timestamp, poster_id, language, title, context, content,
-                    poster_username
-                  FROM
-                    Posts
-                  ORDER BY
-                    timestamp
-                  LIMIT
-                    ?
-                  """, n)
-        return posts
+def n_recent(n: int):
+    return query("""
+                 SELECT
+                   id, timestamp, poster_id, language, title, context, content,
+                   poster_username
+                 FROM
+                   Posts
+                 ORDER BY
+                   timestamp
+                 LIMIT
+                   ?
+                 """, n)
 
-    def by_user(self, user_id: str) -> list[Post]:
-        posts = query("""
-                  SELECT
-                    id, timestamp, poster_id, language, title, context, content,
-                    poster_username
-                  FROM
-                    Posts
-                  WHERE
-                    poster_id = ?
-                  ORDER BY
-                    timestamp
-                  """, user_id)
-        return posts
 
-    def search(self, keyword: str, language: str) -> Post | None:
-        posts = query("""
-                  SELECT
-                    id, timestamp, poster_id, language, title, context, content,
-                    poster_username
-                  FROM
-                    Posts
-                  WHERE
-                    content LIKE ? AND language LIKE ?
-                  """, '%'+keyword+'%', language)
-        return posts
+def by_user(user_id: str):
+    return query("""
+                 SELECT
+                   id, timestamp, poster_id, language, title, context, content,
+                   poster_username
+                 FROM
+                   Posts
+                 WHERE
+                   poster_id = ?
+                 ORDER BY
+                   timestamp
+                 """, user_id)
+
+
+def search(keyword: str, language: str):
+    return query("""
+                 SELECT
+                   id, timestamp, poster_id, language, title, context, content,
+                   poster_username
+                 FROM
+                   Posts
+                 WHERE
+                   content LIKE ? AND language LIKE ?
+                 """, '%'+keyword+'%', language)
